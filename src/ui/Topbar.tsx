@@ -53,7 +53,7 @@ const Topbar = () => {
 								{showProfile && (<UserDescription userData={userData} logOut={logOut} />)}
 							</div>
 							<Image src="/test.jpg" alt="Profile" width={40} height={40} className="rounded-full" />
-							<button onClick={toggleProfile}>
+							<button onClick={toggleProfile}>	
 								<ChevronDownIcon className={`h-6 w-6 text-gray-800 transition-transform duration-300 ${showProfile ? 'rotate-180' : 'rotate-0'}`} />
 							</button>
 						</div>
