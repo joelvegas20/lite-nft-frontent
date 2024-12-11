@@ -49,11 +49,9 @@ const Topbar = () => {
 				{
 					connected ? (
 						<div className='flex'>
-							{
-								showProfile && (
-									<UserDescription userData={userData} logOut={logOut} />
-								)
-							}
+							<div className={`absolute right-5 top-16 transform transition-transform duration-300 ease-out ${showProfile ? 'scale-100 opacity-100' : 'scale-95 opacity-0'}`}>
+								{showProfile && (<UserDescription userData={userData} logOut={logOut} />)}
+							</div>
 							<Image src="/test.jpg" alt="Profile" width={40} height={40} className="rounded-full" />
 							<button onClick={toggleProfile}>
 								<ChevronDownIcon className={`h-6 w-6 text-gray-800 transition-transform duration-300 ${showProfile ? 'rotate-180' : 'rotate-0'}`} />
