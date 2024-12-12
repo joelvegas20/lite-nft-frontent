@@ -1,0 +1,10 @@
+.UserDescriptionContainer {
+  width: 350px;
+  justify-content: space-around;
+}
+
+.AdressText {
+  font-size: 1em;
+  font-weight: bold;
+  color: #000000;
+}

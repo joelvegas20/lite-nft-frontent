@@ -1,0 +1,8 @@
+.UserDescriptionContainer {
+  left: 80px;
+  bottom: 80px;
+}
+
+.headerContainer{
+  background-color: var(--foreground);
+}
