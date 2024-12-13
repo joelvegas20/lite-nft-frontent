@@ -10,7 +10,10 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
+    "@stacks/auth": "^7.0.2",
     "@stacks/connect": "^7.9.0",
+    "@stacks/profile": "^7.0.2",
+    "@stacks/storage": "^7.0.2",
     "next": "15.0.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"

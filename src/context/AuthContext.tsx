@@ -47,7 +47,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
 	return (
 		<AuthContext.Provider value={{ connected, userData, logIn, logOut }}>
-			{children}
+			<div  className="flex flex-col w-full">
+				{children}
+			</div>
 		</AuthContext.Provider>
 	);
 };
