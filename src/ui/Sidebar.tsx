@@ -13,9 +13,6 @@ const Sidebar = () => {
 	const toggleProfile = () => {
 		setShowProfile(!showProfile);
 	};
-	// if (!userSession.isUserSignedIn()) {
-	// 	setShowProfile(false);
-	// }
 	return (
 		<header className={`fixed w-1/15 top-0 left-0 flex flex-col h-full justify-between items-center bg-gray-400 px-5 py-5 ${styles.headerContainer}`}>
 			<p className='text-white'>
