@@ -35,9 +35,13 @@ export default function RootLayout({
       >
         <AuthProvider>
           <ProfileProvider>
-            <Sidebar />
-            <Navbar />
-            {children}
+            <div className="flex min-h-screen">
+              <Sidebar />
+              <div className="flex flex-col h-full">
+                <Navbar />
+                {children}
+              </div>
+            </div>
           </ProfileProvider>
         </AuthProvider>
       </body>

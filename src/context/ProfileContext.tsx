@@ -10,6 +10,7 @@ import {
 } from "react";
 import { Storage } from '@stacks/storage';
 import { generateAvatar } from "@/app/utils/Avatar";
+import { storage } from "@/lib/Storage";
 
 interface ProfileContextData {
   email: string;
@@ -25,8 +26,6 @@ export const ProfileProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [profile, setProfile] = useState<ProfileContextData | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-
   useEffect(() => {
     const fetchProfile = async () => {
       const sessionData = userSession.loadUserData();
@@ -46,22 +45,21 @@ export const ProfileProvider: React.FC<{ children: ReactNode }> = ({
             const parsedProfile: ProfileContextData = JSON.parse(profileString);
             setProfile(parsedProfile);
 
-            console.log("Perfil actualizado:");
           }
         } catch (error) {
-          console.log(error)
-          if (error.code === "does_not_exist") {
+          if ((error as any).code === "does_not_exist") {
             const storage = new Storage({ userSession });
 
-            const profileDefaultImage = generateAvatar(sessionData.profile.stxAddress.mainnet).then((res)=> res);
+            const profileDefaultImage = await generateAvatar(sessionData.profile.stxAddress.mainnet);
 
             const defaultProfile: ProfileContextData = {
               name: "",
               email: "not email",
               bns: "not bns",
-              profilePicture: profileDefaultImage,
+              profilePicture: profileDefaultImage || "",
               stxAddress: sessionData.profile.stxAddress.mainnet,
             };
+
             await storage.putFile(
               "profile.json",
               JSON.stringify(defaultProfile),

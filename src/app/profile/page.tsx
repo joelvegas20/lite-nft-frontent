@@ -66,14 +66,13 @@ const Profile = () => {
   }, []);
 
   return (
-    <div className="h-full w-full p-8">
+    <div className="h-full w-full p-8 text-white">
       <div className="flex gap-4 h-full w-full">
         <div className="flex flex-col gap-4 w-2/3">
           <div className="flex flex-col h-1/2 w-full">
             <h2 className="text-4xl font-bold mb-6">Your Collections</h2>
-            <div className="flex w-full h-full">
-              <div className="flex gap-4 h-full p-4 w-full overflow-x-scroll">
-                {/* Aquí puedes mapear tus Cards */}
+            <div className="flex w-full h-full ">
+              <div className="flex gap-4 h-full p-4 w-full bg-blue-800 overflow-x-scroll">
                 {nftCollections.map((collection, index) => {
                   return (
                     <Card
