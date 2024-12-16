@@ -1,14 +1,14 @@
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { AuthResponsePayload, showConnect, disconnect } from '@stacks/connect';
+import React, { createContext, useContext, useState, ReactNode, useEffect, use, use } from 'react';
+import { AuthResponsePayload, showConnect, disconnect, UserData } from '@stacks/connect';
 import { userSession } from '@/lib/Wallet';
 
 const myAppName = 'MyApp';
 
 interface AuthContextProps {
 	connected: boolean;
-	userData: AuthResponsePayload | null;
+	userData: AuthResponsePayload | UserData | null;
 	logIn: () => void;
 	logOut: () => void;
 }
@@ -17,7 +17,7 @@ const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 	const [connected, setConnected] = useState(false);
-	const [userData, setUserData] = useState<AuthResponsePayload | null>(null);
+	const [userData, setUserData] = useState<AuthResponsePayload | UserData | null>(null);
 
 	const logIn = () => {
 		showConnect({
@@ -41,9 +41,17 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 	const logOut = () => {
 		disconnect();
 		setConnected(false);
-		// setUserData(null);
+		userSession.signUserOut();
 		window.location.reload();
 	};
+
+	useEffect(() => {
+		if (userSession.isUserSignedIn()) {
+		  const data = userSession.loadUserData();
+		  setConnected(true);
+		  setUserData(data);
+		}
+	  }, []);
 
 	return (
 		<AuthContext.Provider value={{ connected, userData, logIn, logOut }}>

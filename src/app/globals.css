@@ -2,6 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+
+@layer utilities {
+  .text-fluid-lg {
+    font-size: clamp(1rem, 2.5vw, 1.5rem);
+  }
+  .text-fluid-xl {
+    font-size: clamp(1.25rem, 3vw, 2rem);
+  }
+  .text-fluid-2xl {
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+  }
+  /* Agrega más clases según sea necesario */
+}
+
 :root {
   --background: #433030;
   --foreground: #363636;
