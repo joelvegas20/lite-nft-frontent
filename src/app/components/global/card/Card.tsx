@@ -82,7 +82,7 @@ export default function Card({
       : "text-xs sm:text-sm";
   const buttonClass =
     variant === "profile" ? "px-3 py-2 text-sm" : "px-2 py-1 text-xs";
-
+  // const cardSizeSection = "w-72 h-96";
   return (
     <div
       className={`relative w-full h-full rounded-2xl overflow-hidden ${containerPadding}`}
@@ -96,7 +96,7 @@ export default function Card({
       />
       <div
         className={`relative z-10 w-full h-full flex flex-col items-center justify-between rounded-2xl ${textColorClass}`}
-        // style={{ backgroundColor: backgroundColorOverlay }}
+      // style={{ backgroundColor: backgroundColorOverlay }}
       >
         <div className="flex w-full gap-4 items-center mb-4">
           <div className={`relative ${imageSize}`}>

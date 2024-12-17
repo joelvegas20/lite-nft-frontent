@@ -37,7 +37,7 @@ export default function RootLayout({
           <ProfileProvider>
             <div className="flex min-h-screen">
               <Sidebar />
-              <div className="flex flex-col h-full">
+              <div className="flex flex-col flex-grow" style={{ width: "90%" }}>
                 <Navbar />
                 {children}
               </div>

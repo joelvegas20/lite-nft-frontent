@@ -29,7 +29,7 @@ const Sidebar = () => {
 		}
 	}, [registerResult]);
 	return (
-		<div className={`flex flex-col h-full justify-between items-center bg-gray-400 px-5 py-5 ${styles.headerContainer}`}>
+		<div className={`flex flex-col h-full justify-between items-center px-5 py-5 ${styles.SidebarContainer}`}>
 			<div className='absolute'>
 				<ToastContainer position='top-left' />
 			</div>

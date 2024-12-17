@@ -3,6 +3,7 @@
   bottom: 80px;
 }
 
-.headerContainer{
+.SidebarContainer{
   background-color: var(--foreground);
+  width: 10%;
 }

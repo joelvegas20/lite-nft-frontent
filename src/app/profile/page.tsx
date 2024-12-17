@@ -66,41 +66,42 @@ const Profile = () => {
   }, []);
 
   return (
+    // <>s</>
     <div className="h-full w-full p-8 text-white">
-      <div className="flex gap-4 h-full w-full">
-        <div className="flex flex-col gap-4 w-2/3">
-          <div className="flex flex-col h-1/2 w-full">
-            <h2 className="text-4xl font-bold mb-6">Your Collections</h2>
-            <div className="flex w-full h-full ">
-              <div className="flex gap-4 h-full p-4 w-full bg-blue-800 overflow-x-scroll">
-                {nftCollections.map((collection, index) => {
-                  return (
-                    <Card
-                    variant="section"
-                      ownerTitle={collection.ownerTitle}
-                      ownerSubtitle={collection.ownerSubtitle}
-                      ownerPicture={collection.ownerPicture}
-                      title={collection.name}
-                      subtitle={collection.subtitle}
-                      image={collection.image}
-                      currentPrice={collection.price}
-                      pinned={true}
-                      quantity={collection.quantity}
-                    />
-                  );
-                })}
+      <div className="flex gap-4">
+          <div className="flex flex-col gap-4 w-3/5">
+            <div className="flex flex-col h-1/2">
+              <h2 className="text-4xl font-bold mb-6">Your Collections</h2>
+              <div className="flex w-full h-full ">
+                <div className="flex gap-4 h-full p-4 w-full bg-blue-800 overflow-x-scroll">
+                  {nftCollections.map((collection, index) => {
+                    return (
+                      <div className="w-30 h-38">
+                        <Card
+                        variant="section"
+                          ownerTitle={collection.ownerTitle}
+                          ownerSubtitle={collection.ownerSubtitle}
+                          ownerPicture={collection.ownerPicture}
+                          title={collection.name}
+                          subtitle={collection.subtitle}
+                          image={collection.image}
+                          currentPrice={collection.price}
+                          pinned={true}
+                          quantity={collection.quantity}
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             </div>
-          </div>
-          {/* History */}
-          <div className="flex flex-col h-1/2">
-            <h2 className="text-4xl font-bold mb-6">History</h2>
-            <div className="bg-[#655454] h-full rounded-2xl">
-              {/* Datos de Historial */}
+            <div className="flex flex-col h-1/2">
+              <h2 className="text-4xl font-bold mb-6">History</h2>
+              <div className="bg-[#655454] h-full rounded-2xl">
+              </div>
             </div>
-          </div>
-        </div>
-        <div className="w-1/3">
+          </div>  
+        <div className="w-2/5">
           <Card
           variant="profile"
             ownerTitle={profileCardData.title}
