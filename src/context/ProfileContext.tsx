@@ -68,10 +68,10 @@ export const ProfileProvider: React.FC<{ children: ReactNode }> = ({
             setProfile(defaultProfile);
           }
         } finally {
-          setLoading(false);
+          // setLoading(false);
         }
       } else {
-        setLoading(false);
+        // setLoading(false);
       }
     };
     fetchProfile();

@@ -1,20 +1,38 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect} from 'react';
 import styles from './Sidebar.module.css';
 import { UserDescription } from './UserDescription';
 import { useAuth } from '@/context/AuthContext';
 import Image from 'next/image';
 import { ArrowRightIcon } from '@heroicons/react/24/solid';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Sidebar = () => {
-	const { connected, userData, logIn, logOut } = useAuth();
+	const { connected, userData, logIn, logOut, registerResult } = useAuth();
 	const [showProfile, setShowProfile] = useState(false);
 	const toggleProfile = () => {
 		setShowProfile(!showProfile);
 	};
+	useEffect(() => {
+		if (registerResult?.type === 'ok') {
+			toast.success(registerResult?.value.value, {
+				position: "top-left",
+				autoClose: 5000,
+			});
+		} else if (registerResult?.type === 'err') {
+			toast.error(registerResult?.value.value, {
+				position: "top-left",
+				autoClose: 5000,
+			});
+		}
+	}, [registerResult]);
 	return (
 		<div className={`flex flex-col h-full justify-between items-center bg-gray-400 px-5 py-5 ${styles.headerContainer}`}>
+			<div className='absolute'>
+				<ToastContainer position='top-left' />
+			</div>
 			<p className='text-white'>
 				<span>LiteNFT</span>
 			</p>

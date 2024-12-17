@@ -1,8 +1,10 @@
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode, useEffect, use, use } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { AuthResponsePayload, showConnect, disconnect, UserData } from '@stacks/connect';
+import { ClarityValue, StacksTransactionWire } from '@stacks/transactions';
 import { userSession } from '@/lib/Wallet';
+import { registerUser } from '@/lib/registerUser';
 
 const myAppName = 'MyApp';
 
@@ -11,6 +13,7 @@ interface AuthContextProps {
 	userData: AuthResponsePayload | UserData | null;
 	logIn: () => void;
 	logOut: () => void;
+	registerResult: ClarityValue | StacksTransactionWire | null;
 }
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
@@ -18,8 +21,22 @@ const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 	const [connected, setConnected] = useState(false);
 	const [userData, setUserData] = useState<AuthResponsePayload | UserData | null>(null);
-
-	const logIn = () => {
+	const [registerResult, setRegisterResult] = useState<ClarityValue | StacksTransactionWire | null>(null);
+	const doRegisterUser = async () => {
+		try {
+			console.log("Attempting to register user....");
+			const registerResponse = await registerUser();
+			console.log('Register response:', registerResponse);
+			if (registerResponse)	
+				setRegisterResult(registerResponse);
+		} catch (error) {
+			console.error('Error registering user:', error);
+		} finally {
+			console.log('End of registration');
+		}
+	};
+	
+	const logIn = async () => {
 		showConnect({
 			appDetails: {
 				name: myAppName,
@@ -28,9 +45,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 			userSession,
 			redirectTo: '/',
 			onFinish: (payload) => {
-				console.log(payload);
 				setConnected(true);
 				setUserData(payload.authResponsePayload);
+				doRegisterUser();
 			},
 			onCancel: () => {
 				window.alert('Authentication was cancelled');
@@ -47,15 +64,15 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
 	useEffect(() => {
 		if (userSession.isUserSignedIn()) {
-		  const data = userSession.loadUserData();
-		  setConnected(true);
-		  setUserData(data);
+			const data = userSession.loadUserData();
+			setConnected(true);
+			setUserData(data);
 		}
-	  }, []);
+	}, []);
 
 	return (
-		<AuthContext.Provider value={{ connected, userData, logIn, logOut }}>
-			<div  className="flex flex-col w-full">
+		<AuthContext.Provider value={{ connected, userData, logIn, logOut, registerResult }}>
+			<div className="flex flex-col w-full">
 				{children}
 			</div>
 		</AuthContext.Provider>

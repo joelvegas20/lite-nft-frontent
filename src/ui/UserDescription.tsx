@@ -1,12 +1,12 @@
 import { userSession } from "@/lib/Wallet";
-import { AuthResponsePayload } from "@stacks/connect";
+import { AuthResponsePayload, UserData } from "@stacks/connect";
 import styles from "./UserDescription.module.css";
 import Image from "next/image";
 
 export const UserDescription = ({
   userData, logOut
 }: {
-  userData: AuthResponsePayload | null,
+  userData: AuthResponsePayload | UserData | null,
   logOut: () => void
 }) => {
   if (!userData) {
