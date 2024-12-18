@@ -1,15 +1,18 @@
 "use client";
 
-import { useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import styles from './Sidebar.module.css';
 import { UserDescription } from './UserDescription';
 import { useAuth } from '@/context/AuthContext';
-import Image from 'next/image';
+import { useProfile } from '@/context/ProfileContext';
 import { ArrowRightIcon } from '@heroicons/react/24/solid';
 import { ToastContainer, toast } from 'react-toastify';
+import Image from 'next/image';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Sidebar = () => {
+	const profile = useProfile();
+	const pPicture = profile?.profilePicture || '/test.jpg';
 	const { connected, userData, logIn, logOut, registerResult } = useAuth();
 	const [showProfile, setShowProfile] = useState(false);
 	const toggleProfile = () => {
@@ -43,7 +46,7 @@ const Sidebar = () => {
 							<div className={`absolute transform transition-transform transition-opacity duration-300 ease-out ${styles.UserDescriptionContainer} ${showProfile ? 'scale-100 opacity-100' : 'scale-95 opacity-0'}`}>
 								{showProfile && (<UserDescription userData={userData} logOut={logOut} />)}
 							</div>
-							<Image src="/test.jpg" alt="Profile" width={40} height={40} className="rounded-full" />
+							<Image src={pPicture} alt="Profile" width={40} height={40} className="rounded-full" />
 							<button onClick={toggleProfile}>
 								<ArrowRightIcon className={`text-white h-6 w-6 text-gray-800 transition-transform duration-300 ${showProfile ? 'rotate-180' : 'rotate-0'}`} />
 							</button>

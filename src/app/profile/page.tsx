@@ -66,7 +66,6 @@ const Profile = () => {
   }, []);
 
   return (
-    // <>s</>
     <div className="h-full w-full p-8 text-white">
       <div className="flex gap-4">
           <div className="flex flex-col gap-4 w-3/5">
@@ -76,7 +75,7 @@ const Profile = () => {
                 <div className="flex gap-4 h-full p-4 w-full bg-blue-800 overflow-x-scroll">
                   {nftCollections.map((collection, index) => {
                     return (
-                      <div className="w-30 h-38">
+                      <div className="w-30 h-38" key={index}>
                         <Card
                         variant="section"
                           ownerTitle={collection.ownerTitle}

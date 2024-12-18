@@ -46,12 +46,14 @@ export const ProfileProvider: React.FC<{ children: ReactNode }> = ({
             setProfile(parsedProfile);
 
           }
+          console.log(profile?.profilePicture);
         } catch (error) {
           if ((error as any).code === "does_not_exist") {
             const storage = new Storage({ userSession });
-
+            
+            console.log("generando imagen de usuario");
             const profileDefaultImage = await generateAvatar(sessionData.profile.stxAddress.mainnet);
-
+            console.log(profileDefaultImage);
             const defaultProfile: ProfileContextData = {
               name: "",
               email: "not email",
@@ -87,6 +89,7 @@ export const ProfileProvider: React.FC<{ children: ReactNode }> = ({
 
 export const useProfile = () => {
   const context = useContext(ProfileContext);
+  console.log(context);
   if (context === undefined) {
     throw new Error("useProfile must be used within an ProfileProvider");
   }
