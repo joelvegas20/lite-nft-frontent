@@ -1,6 +1,6 @@
 'use client';
 
-import { ClarityValue, cvToString, fetchCallReadOnlyFunction, principalCV, stringAsciiCV } from "@stacks/transactions";
+import { ClarityValue, cvToJSON, cvToString, cvToValue, fetchCallReadOnlyFunction, principalCV, stringAsciiCV } from "@stacks/transactions";
 import { useAuth } from "@/context/AuthContext";
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
@@ -20,6 +20,7 @@ const TestPage = () => {
         network: 'testnet',
       });
       console.log('Data:', data);
+      console.log('what is this: ',cvToValue(data));
       setResponse(data);
     } catch (error) {
       console.log("Error ", error);

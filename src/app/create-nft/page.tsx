@@ -1,31 +1,29 @@
 "use client"
 import React, { useRef, useState } from 'react';
-import { PhotoIcon, XMarkIcon, TableCellsIcon } from '@heroicons/react/24/solid';
-import { createNFT } from '@/lib/createNFT';
+import { PhotoIcon, XMarkIcon, TableCellsIcon, ClipboardDocumentListIcon } from '@heroicons/react/24/solid';
+import { createNFT, parseCSV } from '@/lib/createNFT';
 
 
 const CreateNFT = () => {
   const [NFTName, setNFTName] = useState('');
   const [collectionId, setcollectionId] = useState<number>(0); // this might be an array
   const [NFTLogo, setNFTLogo] = useState<File | null>(null);
-  const [collectionAttributes, setCollectionAttributes] = useState<File | null>(null);
-  const [previewURL, setPreviewURL] = useState<string | null>(null);
+  const [NFTAttributes, setNFTAttributes] = useState<File | null>(null);
+  const [ImagePreviewURL, setImagePreviewURL] = useState<string | null>(null);
+  const [AttributeShow, setAttributeShow] = useState<boolean>(false);
   const imageInputRef = useRef<HTMLInputElement>(null);
   const attrInputRef = useRef<HTMLInputElement>(null);
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const NFTAttributesURI = "s"; // this should be the URI of the attributes
-    // here I should preprocess the data and not only send it to the contract but to save the image into any decentralized file system and keep the id of that thing so that the uri points to that thing
-    createNFT({ NFTName, NFTAttributes: NFTAttributesURI, NFTLogo: "imageURL/CID/Identifier", collectionId });
+    createNFT({ NFTName, NFTAttributes, NFTLogo, collectionId });
   };
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("this is the targe of the image ", e.target.files);
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       setNFTLogo(e.target.files[0]);
       const reader = new FileReader();
       reader.onload = () => {
-        setPreviewURL(reader.result as string);
+        setImagePreviewURL(reader.result as string);
       };
       reader.readAsDataURL(file);
     }
@@ -33,13 +31,14 @@ const CreateNFT = () => {
   const handleAttributeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
-      setCollectionAttributes(e.target.files[0]);
+      setNFTAttributes(e.target.files[0]);
       const reader = new FileReader();
       reader.onload = () => {
-        setPreviewURL(reader.result as string);
-        console.log("file successfully uploaded");
+        const csvContent = reader.result as string;
+        parseCSV(csvContent);
+        setAttributeShow(true);
       };
-      reader.readAsDataURL(file);
+      reader.readAsText(file);
     }
   };
   return (
@@ -61,6 +60,7 @@ const CreateNFT = () => {
                 className="p-2 rounded bg-gray-800 text-white"
                 value={NFTName}
                 onChange={(e) => setNFTName(e.target.value)}
+                required
               />
             </div>
             <div className="flex flex-col">
@@ -73,22 +73,53 @@ const CreateNFT = () => {
                 placeholder='Collection ID'
                 value={collectionId}
                 onChange={(e) => setcollectionId(parseInt(e.target.value))}
+                required
               />
             </div>
             <div className="flex flex-col">
               <label htmlFor="collection-Attributes" className='mt-4'>NFT Attributes</label>
               <div className='flex flex-col items-center justify-center bg-gray-800 p-2 text-white rounded h-full'>
                 <label htmlFor="collection-Attributes" className="mt-4 cursor-pointer flex flex-col items-center">
-                  <TableCellsIcon width={80} />
-                  <span className='mt-2 text-gray-400'>Click to upload the attribute csv</span>
+                  {!AttributeShow &&
+                    (
+                      <>
+                        <TableCellsIcon width={80} />
+                        <span className='mt-2 text-gray-400'>Click to upload the attribute csv</span>
+                      </>
+                    )
+                  }
                 </label>
                 <input
                   type="file"
                   id="collection-Attributes"
                   className="hidden"
+                  accept='text/csv'
                   onChange={handleAttributeChange}
                   ref={attrInputRef}
+                  required
                 />
+                {AttributeShow &&
+                  (
+                    <div className='relative bg-gray-100 p-2 rounded text-black w-full'>
+                      <p className='flex flex-row items-center justify-center'>
+                        <ClipboardDocumentListIcon width={18}/>
+                        <span>{NFTAttributes?.name}</span>
+                      </p>
+                      <button
+                        className="absolute bg-gray-100 hover:bg-gray-800 hover:text-white transition-all ease-in-out top-0 right-0 rounded-full text-black"
+                        onClick={() => {
+                          setNFTAttributes(null);
+                          setAttributeShow(false);
+                          if (attrInputRef.current) {
+                            attrInputRef.current.value = '';
+                          }
+                        }}
+                      >
+                        <XMarkIcon width={24} />
+                      </button>
+                    </div>
+                  )
+                }
               </div>
             </div>
           </div>
@@ -97,8 +128,14 @@ const CreateNFT = () => {
             <label htmlFor="collection-image" className="mt-4 text-center">NFT image</label>
             <div className="flex flex-col items-center justify-center bg-gray-800 p-2 text-white rounded h-full">
               <label htmlFor="collection-image" className="cursor-pointer flex flex-col items-center">
-                <PhotoIcon width={80} />
-                <span className="mt-2 text-gray-400">Click to upload an image</span>
+                {!ImagePreviewURL &&
+                  (
+                    <>
+                      <PhotoIcon width={80} />
+                      <span className="mt-2 text-gray-400">Click to upload an image</span>
+                    </>
+                  )
+                }
               </label>
               <input
                 type="file"
@@ -107,18 +144,19 @@ const CreateNFT = () => {
                 accept='image/*'
                 onChange={handleImageChange}
                 ref={imageInputRef}
+                required
               />
               {
-                previewURL && (
+                ImagePreviewURL && (
                   <figure className='relative'>
                     <img
-                      src={previewURL}
+                      src={ImagePreviewURL}
                       alt="Image Preview"
                     />
                     <button
                       className="absolute bg-gray-100 hover:bg-gray-800 hover:text-white transition-all ease-in-out top-0 right-0 rounded-full text-black"
                       onClick={() => {
-                        setPreviewURL(null);
+                        setImagePreviewURL(null);
                         setNFTLogo(null);
                         if (imageInputRef.current) {
                           imageInputRef.current.value = '';
