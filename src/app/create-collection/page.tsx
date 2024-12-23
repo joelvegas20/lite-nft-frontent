@@ -2,8 +2,6 @@
 import React, { useRef, useState } from 'react';
 import { PhotoIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import { createCollection } from '@/lib/createCollection';
-import { uploadToGaiaHub } from '@stacks/storage';
-import {storage} from '@/lib/Storage';
 
 const CreateCollection = () => {
   const [collectionName, setCollectionName] = useState('');
@@ -12,10 +10,14 @@ const CreateCollection = () => {
   const [collectionImage, setCollectionImage] = useState<File | null>(null);
   const [previewURL, setPreviewURL] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // here I should preprocess the data and not only send it to the contract but to save the image into any decentralized file system and keep the id of that thing so that the uri points to that thing
-    createCollection({collectionName, collectionDescription, collectionLogo:"imageURL/CID/Identifier"});
+    // verify if the collection quantity is a number
+    if (isNaN(Number(collectionQuantity))) {
+      alert('Collection quantity must be a number');
+      return;
+    }
+    await createCollection({ collectionName, collectionDescription, collectionImage });
   };
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     console.log("this is the targe of the image ", e.target.files);
@@ -48,6 +50,7 @@ const CreateCollection = () => {
                 className="p-2 rounded bg-gray-800 text-white"
                 value={collectionName}
                 onChange={(e) => setCollectionName(e.target.value)}
+                required
               />
             </div>
             <div className="flex flex-col">
@@ -58,6 +61,7 @@ const CreateCollection = () => {
                 className="p-2 rounded bg-gray-800 text-white"
                 value={collectionQuantity}
                 onChange={(e) => setCollectionQuantity(e.target.value)}
+                required
               />
             </div>
             <div className="flex flex-col">
@@ -67,6 +71,7 @@ const CreateCollection = () => {
                 className="p-2 rounded bg-gray-800 text-white"
                 value={collectionDescription}
                 onChange={(e) => setCollectionDescription(e.target.value)}
+                required
               />
             </div>
           </div>
@@ -75,8 +80,14 @@ const CreateCollection = () => {
             <label htmlFor="collection-image" className="mt-4 text-center">Collection image</label>
             <div className="flex flex-col items-center justify-center bg-gray-800 p-2 text-white rounded h-full">
               <label htmlFor="collection-image" className="cursor-pointer flex flex-col items-center">
-                <PhotoIcon width={80} />
-                <span className="mt-2 text-gray-400">Click to upload an image</span>
+                {
+                  !previewURL && (
+                    <>
+                      <PhotoIcon width={80} />
+                      <span className="mt-2 text-gray-400">Click to upload an image</span>
+                    </>
+                  )
+                } 
               </label>
               <input
                 type="file"
@@ -85,6 +96,7 @@ const CreateCollection = () => {
                 accept='image/*'
                 onChange={handleImageChange}
                 ref={fileInputRef}
+                required
               />
               {
                 previewURL && (

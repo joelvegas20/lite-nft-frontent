@@ -1,22 +1,37 @@
 import { openContractCall } from "@stacks/connect";
-import { stringAsciiCV, StringAsciiCV } from "@stacks/transactions";
+import { stringAsciiCV } from "@stacks/transactions";
+import { storage } from "@/lib/Storage"
 
 interface createCollectionProps {
   collectionName: string;
   collectionDescription: string;
-  collectionLogo: string;
+  collectionImage: File | null;
 };
 
-export const createCollection = ({
+const uploadImage = async (
+  collectionName: string,
+  collectionImage: File,
+) => {
+  // this return the url of the upload image into the gaia storage
+  return await storage.putFile(
+    `${collectionName}-image`,
+    collectionImage as File,
+    {
+      encrypt: false,
+    });
+};
+
+export const createCollection = async ({
   collectionName,
   collectionDescription,
-  collectionLogo,
+  collectionImage,
 }: createCollectionProps) => {
-  openContractCall({
+  const imageURL = await uploadImage(collectionName, collectionImage as File);
+  await openContractCall({
     contractAddress: 'ST3GBYD0VN28MAPDGNGTFNXQV5QJXQ3VCV3WZT75T',
     contractName: 'collection-v5',
     functionName: 'create-collection',
-    functionArgs: [stringAsciiCV(collectionName), stringAsciiCV(collectionDescription), stringAsciiCV(collectionLogo)],
+    functionArgs: [stringAsciiCV(collectionName), stringAsciiCV(collectionDescription), stringAsciiCV(imageURL)],
     network: 'testnet',
     onFinish: (data) => {
       console.log('Data:', data);
