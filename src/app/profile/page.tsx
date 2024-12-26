@@ -1,40 +1,38 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { useAuth } from "@/context/AuthContext";
-import Image from "next/image";
-import Card from "../components/global/card/Card";
 import { useProfile } from "@/context/ProfileContext";
-import { generateAvatar } from "../utils/Avatar";
+import { useGlobal } from "@/context/GlobalContext";
+ // Asegúrate de que el path sea correcto
+import Card from "../components/global/card/Card";
+import SpinnerLoader from "@/ui/SpinnerLoader";
+import { shortenAddress } from "../utils/Address";
 
 const STATIC_IMAGE_URL =
   "https://images.gamma.io/ipfs/QmcAqUQDJ1bcLZVtCqJduLReGYyWm9TjdcHzAqNDEV5r24/images/1109.webp";
 
-
-function shortenAddress(address: string, visibleStart = 5, visibleEnd = 3) {
-  if (address.length <= visibleStart + visibleEnd) {
-    return address; // Si el address es más corto, no se recorta.
-  }
-  const start = address.slice(0, visibleStart);
-  const end = address.slice(-visibleEnd);
-  return `${start}...${end}`;
+async function getCollections(address) {
+  return await fetch(`/api/collection/${address}`)
+    .then((res) => res.json())
+    .then((res) => res.data);
 }
 
-async function getCollections() {
-  return await fetch("/api/collection").then((res) => res.json());
+async function getNFTs(address) {
+  return await fetch(`/api/collection/${address}`)
+    .then((res) => res.json())
+    .then((res) => res.data);
 }
 
 const Profile = () => {
-  const { userData } = useAuth();
   const profile = useProfile();
-
+  const { currentProfileSection } = useGlobal(); // Toggle: NFTs o Collections
   const [profileCardData, setProfileCardData] = useState({
     title: "",
     subtitle: "not bns",
     profilePicture: "",
   });
 
-  const [nftCollections, setNftCollections] = useState<any>([]);
-
+  const [items, setItems] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (profile) {
@@ -53,56 +51,79 @@ const Profile = () => {
       }
     }
   }, [profile]);
-
+    
   useEffect(() => {
-    getCollections()
-      .then((collections) => {
-        console.log("Collections:", collections);
-        setNftCollections(collections);
-      })
-      .catch((error) => {
-        console.error("Error fetching collections:", error);
-      });
-  }, []);
+    setIsLoading(true);
+    const fetchData = async () => {
+      try {
+        console.log("Profile: ", profile);
+
+        if (profile) {
+          const data =
+            currentProfileSection === "NFTs" ? await getNFTs(profile.stxAddress) : await getCollections(profile.stxAddress);
+          
+          setTimeout(() => {
+            setItems(data);
+            setIsLoading(false);
+          }, 250);
+        } else {
+          setIsLoading(false);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setIsLoading(false);
+      }
+    };
+  
+    fetchData();
+  }, [currentProfileSection, profile]);
+
 
   return (
     <div className="h-full w-full p-8 text-white">
-      <div className="flex gap-4">
-          <div className="flex flex-col gap-4 w-3/5">
-            <div className="flex flex-col h-1/2">
-              <h2 className="text-4xl font-bold mb-6">Your Collections</h2>
-              <div className="flex w-full h-full ">
-                <div className="flex gap-4 h-full p-4 w-full bg-blue-800 overflow-x-scroll">
-                  {nftCollections.map((collection, index) => {
-                    return (
-                      <div className="w-30 h-38" key={index}>
-                        <Card
-                        variant="section"
-                          ownerTitle={collection.ownerTitle}
-                          ownerSubtitle={collection.ownerSubtitle}
-                          ownerPicture={collection.ownerPicture}
-                          title={collection.name}
-                          subtitle={collection.subtitle}
-                          image={collection.image}
-                          currentPrice={collection.price}
-                          pinned={true}
-                          quantity={collection.quantity}
-                        />
-                      </div>
-                    );
-                  })}
+      <div className="flex gap-4 h-full">
+        <div className="flex flex-col gap-4 w-3/5">
+          <div className="flex flex-col h-1/2">
+            <h2 className="text-4xl font-bold mb-4">
+              Your {currentProfileSection}
+            </h2>
+            <div className="flex w-full h-full">
+              {isLoading ? (
+                <div className="flex justify-center items-center w-full">
+                  <SpinnerLoader />
                 </div>
-              </div>
+              ) : (
+                <div className="flex gap-4 h-full px-4 py-2 w-full overflow-x-scroll overflow-scroll">
+                  {items.map((item, index) => (
+                    <div className="w-[30rem] h-38" key={index}>
+                      <Card
+                        variant="section"
+                        ownerTitle={item.ownerTitle}
+                        ownerSubtitle={item.ownerSubtitle}
+                        ownerPicture={item.ownerPicture}
+                        title={item.name}
+                        subtitle={item.subtitle}
+                        image={item.image}
+                        currentPrice={item.price}
+                        pinned={true}
+                        quantity={20}
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
-            <div className="flex flex-col h-1/2">
-              <h2 className="text-4xl font-bold mb-6">History</h2>
-              <div className="bg-[#655454] h-full rounded-2xl">
-              </div>
-            </div>
-          </div>  
+          </div>
+
+          <div className="flex flex-col h-1/2">
+            <h2 className="text-4xl font-bold mb-6">History</h2>
+            <div className="bg-[#655454] h-full rounded-2xl"></div>
+          </div>
+        </div>
+
         <div className="w-2/5">
           <Card
-          variant="profile"
+            variant="profile"
             ownerTitle={profileCardData.title}
             ownerSubtitle={profileCardData.subtitle}
             ownerPicture={profileCardData.profilePicture}
@@ -120,3 +141,4 @@ const Profile = () => {
 };
 
 export default Profile;
+
