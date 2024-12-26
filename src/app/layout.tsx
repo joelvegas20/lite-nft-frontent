@@ -6,6 +6,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Navbar from "./components/global/Navbar";
 import { ProfileProvider } from "@/context/ProfileContext";
+import { GlobalProvider } from "@/context/GlobalContext";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -33,17 +34,22 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex min-h-screen`}
       >
-        <AuthProvider>
-          <ProfileProvider>
-            <div className="flex min-h-screen">
-              <Sidebar />
-              <div className="flex flex-col flex-grow" style={{ width: "90%" }}>
-                <Navbar />
-                {children}
+        <GlobalProvider>
+          <AuthProvider>
+            <ProfileProvider>
+              <div className="flex min-h-screen">
+                <Sidebar />
+                <div
+                  className="flex flex-col flex-grow"
+                  style={{ width: "90%" }}
+                >
+                  <Navbar />
+                  {children}
+                </div>
               </div>
-            </div>
-          </ProfileProvider>
-        </AuthProvider>
+            </ProfileProvider>
+          </AuthProvider>
+        </GlobalProvider>
       </body>
     </html>
   );

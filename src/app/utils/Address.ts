@@ -10,3 +10,4 @@ export function shortenAddress(
   const end = address.slice(-visibleEnd);
   return `${start}...${end}`;
 }
+

@@ -9,6 +9,8 @@ export const UserDescription = ({
   userData: AuthResponsePayload | UserData | null,
   logOut: () => void
 }) => {
+
+  console.log("USer data:", userData)
   if (!userData) {
     window.alert("No user data found");
     return null;
