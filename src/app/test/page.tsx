@@ -1,9 +1,11 @@
 'use client';
 
-import { ClarityValue, cvToJSON, cvToString, cvToValue, fetchCallReadOnlyFunction, principalCV, stringAsciiCV } from "@stacks/transactions";
+import { ClarityValue, cvToJSON, cvToString, cvToValue, getCVTypeString, fetchCallReadOnlyFunction } from "@stacks/transactions";
 import { useAuth } from "@/context/AuthContext";
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
+import { RetrieveUserCollection } from "@/lib/RetrieveUserCollections";
+
 
 const TestPage = () => {
   const [response, setResponse] = useState<ClarityValue | null>(null);
@@ -11,19 +13,24 @@ const TestPage = () => {
   const tryToRetrieveData = async () => {
     let data: ClarityValue;
     try {
+      console.log("Start data retrieval");
       data = await fetchCallReadOnlyFunction({
-        contractName: 'auth-v2',
+        contractName: 'collection-v5',
         contractAddress: 'ST3GBYD0VN28MAPDGNGTFNXQV5QJXQ3VCV3WZT75T',
-        functionName: 'get-user-data',
-        functionArgs: [principalCV(userData?.profile.stxAddress.testnet)],
+        functionName: 'get-collections-by-owner',
+        functionArgs: [],
         senderAddress: userData?.profile.stxAddress.testnet,
         network: 'testnet',
       });
       console.log('Data:', data);
-      console.log('what is this: ',cvToValue(data));
+      (cvToValue(data) as Array<ClarityValue>).forEach((value: any, index) => {
+        console.log(`the element at index ${index} is `, value.value.name.value);
+      });
       setResponse(data);
+      const res = await RetrieveUserCollection();
+      console.log('Collections:', res);
     } catch (error) {
-      console.log("Error ", error);
+      console.error("Error ", error);
     } 
     finally {
       console.log("End");
