@@ -1,8 +1,8 @@
 "use client"
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { PhotoIcon, XMarkIcon, TableCellsIcon, ClipboardDocumentListIcon } from '@heroicons/react/24/solid';
 import { createNFT, parseCSV } from '@/lib/createNFT';
-
+import { RetrieveUserCollection } from '@/lib/RetrieveUserCollections';
 
 const CreateNFT = () => {
   const [NFTName, setNFTName] = useState('');
@@ -11,6 +11,7 @@ const CreateNFT = () => {
   const [NFTAttributes, setNFTAttributes] = useState<File | null>(null);
   const [ImagePreviewURL, setImagePreviewURL] = useState<string | null>(null);
   const [AttributeShow, setAttributeShow] = useState<boolean>(false);
+  const [collectionsByOwner, setCollectionsByOwner] = useState<{ id: string, name: string }[]>([]);
   const imageInputRef = useRef<HTMLInputElement>(null);
   const attrInputRef = useRef<HTMLInputElement>(null);
   const handleSubmit = (e: React.FormEvent) => {
@@ -41,6 +42,19 @@ const CreateNFT = () => {
       reader.readAsText(file);
     }
   };
+  const fetchCollections = async () => {
+    try {
+      const collections = await RetrieveUserCollection();
+      setCollectionsByOwner(collections);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  if (collectionsByOwner.length === 0) {
+    fetchCollections();
+    console.log('starting retrieval');
+    return <div>Loading...</div>;
+  }
   return (
     <div className="flex justify-center mt-4">
       <form
@@ -64,17 +78,23 @@ const CreateNFT = () => {
               />
             </div>
             <div className="flex flex-col">
-              <label htmlFor="collection-id" className="mt-4">Collection id</label>
-              {/* generate a list of options of collections using collection-owner-validation */}
-              <input
-                id="collection-id"
-                type='number'
-                className="p-2 rounded bg-gray-800 text-white"
-                placeholder='Collection ID'
-                value={collectionId}
-                onChange={(e) => setcollectionId(parseInt(e.target.value))}
-                required
-              />
+              <label htmlFor="collection-id" className="mt-4">Collection</label>
+              <select
+              id="collection-id"
+              className="p-2 rounded bg-gray-800 text-white"
+              value={collectionId}
+              onChange={(e) => setcollectionId(parseInt(e.target.value))}
+              required
+              >
+              <option value="" disabled>Select a collection</option>
+              {
+                collectionsByOwner.map((collection) => (
+                <option key={collection.id} value={collection.id}>
+                  {collection.name}
+                </option>
+                ))
+              }
+              </select>
             </div>
             <div className="flex flex-col">
               <label htmlFor="collection-Attributes" className='mt-4'>NFT Attributes</label>
@@ -102,7 +122,7 @@ const CreateNFT = () => {
                   (
                     <div className='relative bg-gray-100 p-2 rounded text-black w-full'>
                       <p className='flex flex-row items-center justify-center'>
-                        <ClipboardDocumentListIcon width={18}/>
+                        <ClipboardDocumentListIcon width={18} />
                         <span>{NFTAttributes?.name}</span>
                       </p>
                       <button
