@@ -1,0 +1,7 @@
+.cardMod {
+    border-radius: 50%;
+    width: 200px;
+    height: 50px;
+    top: -50px;
+    background-color: var(--background);
+}

@@ -9,6 +9,7 @@ import {
 } from "@/app/utils/Colors";
 import { FaBookmark } from "react-icons/fa";
 import { LuImages } from "react-icons/lu";
+import styles from '@/ui/Card.module.css';
 
 interface CardProps {
   variant?: "profile" | "section"; // Propiedad para determinar la variante
@@ -98,8 +99,15 @@ export default function Card({
       />
       <div
         className={`relative z-10 w-full h-full flex flex-col items-center justify-between rounded-2xl ${textColorClass}`}
-        // style={{ backgroundColor: backgroundColorOverlay }}
+      // style={{ backgroundColor: backgroundColorOverlay }}
       >
+        {variant === "profile" &&
+          (
+            <div className={`absolute ${styles.cardMod}`}>
+            </div>
+          )
+        }
+
         <div className="flex w-full gap-4 items-center mb-4">
           <div className={`relative ${imageSize}`}>
             {ownerPicture ? (

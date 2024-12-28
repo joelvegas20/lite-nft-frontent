@@ -20,13 +20,13 @@ const Sidebar = () => {
 		setShowProfile(!showProfile);
 	};
 	useEffect(() => {
-		if (registerResult?.type === 'ok') {
-			toast.success(registerResult?.value.value, {
+		if ((registerResult as any)?.type === 'ok') {
+			toast.success((registerResult as any)?.value.value, {
 				position: "top-left",
 				autoClose: 5000,
 			});
-		} else if (registerResult?.type === 'err') {
-			toast.error(registerResult?.value.value, {
+		} else if ((registerResult as any)?.type === 'err') {
+			toast.error((registerResult as any)?.value.value, {
 				position: "top-left",
 				autoClose: 5000,
 			});

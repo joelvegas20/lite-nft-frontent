@@ -32,20 +32,33 @@ export const ProfileProvider: React.FC<{ children: ReactNode }> = ({
         setProfile(null); // Limpia el perfil si no hay sesión
         return;
       }
-  
+      const sessionData = userSession.loadUserData();
       try {
-        const sessionData = userSession.loadUserData();
         const storage = new Storage({ userSession });
         const profileData = await storage.getFile("profile.json", {
           decrypt: false,
         });
-  
         if (profileData) {
           const profileString =
             typeof profileData === "string"
               ? profileData
               : new TextDecoder().decode(profileData as ArrayBuffer);
           const parsedProfile: ProfileContextData = JSON.parse(profileString);
+          const currentProfilePicture = parsedProfile.profilePicture;
+          // in case that the profile picture is not a string for any reason, create it and upload it
+          if (typeof currentProfilePicture === "object") {
+            const profileDefaultImage = await generateAvatar(sessionData.profile.stxAddress.mainnet);
+            const defaultProfile: ProfileContextData = {
+              name: "",
+              email: "not email",
+              bns: "not bns",
+              profilePicture: profileDefaultImage || "",
+              stxAddress: sessionData.profile.stxAddress.testnet,
+            };
+            await storage.putFile("profile.json", JSON.stringify(defaultProfile), {
+              encrypt: false,
+            });
+          }
           setProfile(parsedProfile);
         }
       } catch (error) {
@@ -58,7 +71,7 @@ export const ProfileProvider: React.FC<{ children: ReactNode }> = ({
             profilePicture: profileDefaultImage || "",
             stxAddress: sessionData.profile.stxAddress.testnet,
           };
-  
+
           await storage.putFile("profile.json", JSON.stringify(defaultProfile), {
             encrypt: false,
           });
@@ -66,7 +79,7 @@ export const ProfileProvider: React.FC<{ children: ReactNode }> = ({
         }
       }
     };
-  
+
     fetchProfile();
   }, []);
 
@@ -80,7 +93,9 @@ export const ProfileProvider: React.FC<{ children: ReactNode }> = ({
 
 export const useProfile = () => {
   const context = useContext(ProfileContext);
-  console.log(context);
+  if (context?.profilePicture === "") {
+
+  }
   if (context === undefined) {
     throw new Error("useProfile must be used within an ProfileProvider");
   }

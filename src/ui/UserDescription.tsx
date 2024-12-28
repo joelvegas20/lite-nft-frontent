@@ -9,8 +9,7 @@ export const UserDescription = ({
   logOut: () => void,
   profilePicture: string
 }) => {
-
-  console.log("Profile Picture:", profilePicture)
+  
   if (!userData) {
     window.alert("No user data found");
     return null;
