@@ -115,7 +115,7 @@ export const createNFT = async ({
     try {
       // retrieving the content of the csv file
       const csvContent = reader.result as string;
-      const nftLogoURL = await uploadImage(NFTName, NFTAttributes as File);
+      const nftLogoURL = await uploadImage(NFTName, NFTLogo as File);
       // parsing the content into a json object
       const results = await parseCSV(csvContent);
       // const collectionName = getCollectionName(collectionId);
