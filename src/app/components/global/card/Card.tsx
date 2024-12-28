@@ -88,7 +88,7 @@ export default function Card({
   // const cardSizeSection = "w-72 h-96";
   return (
     <div
-      className={`relative w-full h-full rounded-2xl overflow-hidden ${containerPadding}`}
+      className={`relative w-full h-full rounded-2xl overflow-hidden ${containerPadding} `}
     >
       <Image
         src={image}
@@ -98,8 +98,8 @@ export default function Card({
         sizes="(max-width: 768px) 100vw, 50vw"
       />
       <div
-        className={`relative z-10 w-full h-full flex flex-col items-center justify-between rounded-2xl ${textColorClass}`}
-      // style={{ backgroundColor: backgroundColorOverlay }}
+        className={`relative z-10 w-full h-full flex flex-col items-center justify-between rounded-2xl ${textColorClass} ${variant === "profile" ? "pt-4" : "pt-2"}`}
+        // style={{ backgroundColor: backgroundColorOverlay }}
       >
         {variant === "profile" &&
           (
