@@ -9,10 +9,11 @@ import { ArrowRightIcon } from '@heroicons/react/24/solid';
 import { ToastContainer, toast } from 'react-toastify';
 import Image from 'next/image';
 import 'react-toastify/dist/ReactToastify.css';
+import Link from 'next/link';
 
 const Sidebar = () => {
 	const profile = useProfile();
-	const pPicture = profile?.profilePicture || '/test.jpg';
+	const pPicture = profile?.profilePicture || '/default-avatar-profile-user.png';
 	const { connected, userData, logIn, logOut, registerResult } = useAuth();
 	const [showProfile, setShowProfile] = useState(false);
 	const toggleProfile = () => {
@@ -31,20 +32,21 @@ const Sidebar = () => {
 			});
 		}
 	}, [registerResult]);
+
 	return (
 		<div className={`flex flex-col h-full justify-between items-center px-5 py-5 shadow-xl`}>
 			<div className='absolute'>
 				<ToastContainer position='top-left' />
 			</div>
 			<p className='text-white'>
-				<span>LiteNFT</span>
+				<Link href='/'>LiteNFT</Link>
 			</p>
 			<div>
 				{
 					connected ? (
 						<div className='flex'>
 							<div className={`absolute transform transition-transform transition-opacity duration-300 ease-out ${styles.UserDescriptionContainer} ${showProfile ? 'scale-100 opacity-100' : 'scale-95 opacity-0'}`}>
-								{showProfile && (<UserDescription userData={userData} logOut={logOut} />)}
+								{showProfile && (<UserDescription userData={userData} logOut={logOut} profilePicture={pPicture} />)}
 							</div>
 							<Image src={pPicture} alt="Profile" width={40} height={40} className="rounded-full" />
 							<button onClick={toggleProfile}>

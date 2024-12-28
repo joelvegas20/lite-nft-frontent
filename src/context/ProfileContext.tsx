@@ -28,53 +28,45 @@ export const ProfileProvider: React.FC<{ children: ReactNode }> = ({
   const [profile, setProfile] = useState<ProfileContextData | null>(null);
   useEffect(() => {
     const fetchProfile = async () => {
-      const sessionData = userSession.loadUserData();
-
-      if (userSession.isUserSignedIn()) {
-        try {
-          const storage = new Storage({ userSession });
-          const profileData = await storage.getFile("profile.json", {
-            decrypt: false,
-          });
-
-          if (profileData) {
-            const profileString =
-              typeof profileData === "string"
-                ? profileData
-                : new TextDecoder().decode(profileData as ArrayBuffer);
-            const parsedProfile: ProfileContextData = JSON.parse(profileString);
-            setProfile(parsedProfile);
-
-          }
-        } catch (error) {
-          if ((error as any).code === "does_not_exist") {
-            const storage = new Storage({ userSession });
-            
-            console.log("generando imagen de usuario");
-            const profileDefaultImage = await generateAvatar(sessionData.profile.stxAddress.mainnet);
-            console.log(profileDefaultImage);
-            const defaultProfile: ProfileContextData = {
-              name: "",
-              email: "not email",
-              bns: "not bns",
-              profilePicture: profileDefaultImage || "",
-              stxAddress: sessionData.profile.stxAddress.testnet,// Replace with current network
-            };
-
-            await storage.putFile(
-              "profile.json",
-              JSON.stringify(defaultProfile),
-              { encrypt: false }
-            );
-            setProfile(defaultProfile);
-          }
-        } finally {
-          // setLoading(false);
+      if (!userSession.isUserSignedIn()) {
+        setProfile(null); // Limpia el perfil si no hay sesión
+        return;
+      }
+  
+      try {
+        const sessionData = userSession.loadUserData();
+        const storage = new Storage({ userSession });
+        const profileData = await storage.getFile("profile.json", {
+          decrypt: false,
+        });
+  
+        if (profileData) {
+          const profileString =
+            typeof profileData === "string"
+              ? profileData
+              : new TextDecoder().decode(profileData as ArrayBuffer);
+          const parsedProfile: ProfileContextData = JSON.parse(profileString);
+          setProfile(parsedProfile);
         }
-      } else {
-        // setLoading(false);
+      } catch (error) {
+        if ((error as any).code === "does_not_exist") {
+          const profileDefaultImage = await generateAvatar(sessionData.profile.stxAddress.mainnet);
+          const defaultProfile: ProfileContextData = {
+            name: "",
+            email: "not email",
+            bns: "not bns",
+            profilePicture: profileDefaultImage || "",
+            stxAddress: sessionData.profile.stxAddress.testnet,
+          };
+  
+          await storage.putFile("profile.json", JSON.stringify(defaultProfile), {
+            encrypt: false,
+          });
+          setProfile(defaultProfile);
+        }
       }
     };
+  
     fetchProfile();
   }, []);
 
