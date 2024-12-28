@@ -42,10 +42,10 @@ export default function Navbar() {
             className="bg-transparent focus:outline-none text-white font-bold placeholder-[#6C5252] mr-4 w-full"
           />
         </div>
-        <button className="flex items-center font-bold text-normal gap-2 bg-white text-[#363636] px-5 py-2 rounded-full">
+        <a href="/create-nft" className="flex items-center font-bold text-normal gap-2 bg-white text-[#363636] px-5 py-2 rounded-full hover:bg-[#E5E5E5]">  
           <BsLightningChargeFill />
           <span>Create</span>
-        </button>
+        </a>
       </div>
     </div>
   );

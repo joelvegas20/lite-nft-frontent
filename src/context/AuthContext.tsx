@@ -37,7 +37,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 	};
 	
 	const logIn = async () => {
-		showConnect({
+		await showConnect({
 			appDetails: {
 				name: myAppName,
 				icon: 'https://cdn-icons-png.flaticon.com/512/10061/10061823.png',
@@ -48,13 +48,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 				setConnected(true);
 				setUserData(payload.authResponsePayload);
 				doRegisterUser();
+				window.location.reload();
 			},
 			onCancel: () => {
 				window.alert('Authentication was cancelled');
 			}
 		});
 	};
-
 	const logOut = () => {
 		disconnect();
 		setConnected(false);
