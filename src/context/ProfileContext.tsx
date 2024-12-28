@@ -29,10 +29,10 @@ export const ProfileProvider: React.FC<{ children: ReactNode }> = ({
   useEffect(() => {
     const fetchProfile = async () => {
       const sessionData = userSession.loadUserData();
+
       if (userSession.isUserSignedIn()) {
         try {
           const storage = new Storage({ userSession });
-
           const profileData = await storage.getFile("profile.json", {
             decrypt: false,
           });
@@ -46,7 +46,6 @@ export const ProfileProvider: React.FC<{ children: ReactNode }> = ({
             setProfile(parsedProfile);
 
           }
-          console.log(profile?.profilePicture);
         } catch (error) {
           if ((error as any).code === "does_not_exist") {
             const storage = new Storage({ userSession });
@@ -59,7 +58,7 @@ export const ProfileProvider: React.FC<{ children: ReactNode }> = ({
               email: "not email",
               bns: "not bns",
               profilePicture: profileDefaultImage || "",
-              stxAddress: sessionData.profile.stxAddress.mainnet,
+              stxAddress: sessionData.profile.stxAddress.testnet,// Replace with current network
             };
 
             await storage.putFile(

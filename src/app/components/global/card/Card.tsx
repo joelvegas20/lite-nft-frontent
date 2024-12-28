@@ -7,6 +7,8 @@ import {
   parseRGBColor,
   isColorLight,
 } from "@/app/utils/Colors";
+import { FaBookmark } from "react-icons/fa";
+import { LuImages } from "react-icons/lu";
 
 interface CardProps {
   variant?: "profile" | "section"; // Propiedad para determinar la variante
@@ -96,17 +98,21 @@ export default function Card({
       />
       <div
         className={`relative z-10 w-full h-full flex flex-col items-center justify-between rounded-2xl ${textColorClass}`}
-      // style={{ backgroundColor: backgroundColorOverlay }}
+        // style={{ backgroundColor: backgroundColorOverlay }}
       >
         <div className="flex w-full gap-4 items-center mb-4">
           <div className={`relative ${imageSize}`}>
-            <Image
-              src={ownerPicture}
-              alt="Profile Owner Picture"
-              fill
-              className="rounded-full w-32 h-32 object-cover" // Ajusta el tamaño según sea necesario
-              sizes="(max-width: 768px) 100vw, 50vw"
-            />
+            {ownerPicture ? (
+              <Image
+                src={ownerPicture}
+                alt="Profile Owner Picture"
+                fill
+                className="rounded-full w-32 h-32 object-cover" // Ajusta el tamaño según sea necesario
+                sizes="(max-width: 768px) 100vw, 50vw"
+              />
+            ) : (
+              ""
+            )}
           </div>
           <div>
             <h3 className={`font-semibold ${titleClass}`}>{ownerTitle}</h3>
@@ -120,16 +126,22 @@ export default function Card({
               {subtitle}
             </p>
           </div>
-          <div className="grid grid-cols-4 gap-2 sm:gap-4 text-[80%] justify-center w-full h-10 sm:h-12 rounded-full">
-            <div className="bg-[#4D3B3B] flex items-center justify-center rounded-full">
-              <span>{quantity}</span>
+          <div className="flex gap-4 text-sm justify-center w-full h-10 rounded-full">
+            <div className="col-span-2 flex items-center justify-center bg-[#4D3B3B] rounded-full p-4 shadow sshadow-xl ">
+              {currentPrice ? (
+                <span>
+                  {currentPrice} <span className="font-bold">STX</span>
+                </span>
+              ) : (
+                <span className="flex items-center gap-2">
+                  <LuImages />
+                  <span>{quantity}</span>
+                </span>
+              )}
             </div>
-            <div className="col-span-2 flex items-center justify-center bg-[#4D3B3B] rounded-full">
-              {currentPrice} STX
-            </div>
-            <div className=" flex text-center items-center justify-center bg-[#4D3B3B] rounded-full">
-              {currentPrice} STX
-            </div>
+            <button className=" flex text-center items-center justify-center p-4 bg-[#4D3B3B] rounded-full">
+              <FaBookmark />
+            </button>
           </div>
         </div>
       </div>
