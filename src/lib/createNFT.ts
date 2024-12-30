@@ -10,6 +10,7 @@ interface NFTCollectionProps {
   NFTAttributes: File | null;
   NFTLogo: File | null;
   collectionId: number;
+  collectionName: string;
 };
 
 interface ParsedCSVRecord {
@@ -92,23 +93,13 @@ export const parseCSV = async (csvContent: string): Promise<ParsedCSVRecord> => 
   });
 };
 
-const getCollectionName = (collectionId: number) => {
-  const userData = userSession.loadUserData();
-  fetchCallReadOnlyFunction({
-    contractAddress: 'ST3GBYD0VN28MAPDGNGTFNXQV5QJXQ3VCV3WZT75T',
-    contractName: 'collection-v5',
-    functionName: 'get-collection-name',
-    senderAddress: userData?.profile.stxAddress.testnet,
-    functionArgs: [uintCV(collectionId)],
-    network: 'testnet',
-  })
-};
 
 export const createNFT = async ({
   NFTName,
   NFTAttributes,
   NFTLogo,
-  collectionId
+  collectionId,
+  collectionName
 }: NFTCollectionProps) => {
   const reader = new FileReader();
   reader.onload = async () => {
@@ -119,7 +110,6 @@ export const createNFT = async ({
       // parsing the content into a json object
       const results = await parseCSV(csvContent);
       // const collectionName = getCollectionName(collectionId);
-      const collectionName = "wait for it";
       const metadata = generateMedatada({
         name: NFTName,
         collection: collectionName,

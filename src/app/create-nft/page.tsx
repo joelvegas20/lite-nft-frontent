@@ -7,7 +7,8 @@ import { redirect } from 'next/navigation';
 
 const CreateNFT = () => {
   const [NFTName, setNFTName] = useState('');
-  const [collectionId, setcollectionId] = useState<number>(0); // this might be an array
+  const [collectionId, setcollectionId] = useState<number>(0); 
+  const [collectionName, setCollectionName] = useState<string>(''); 
   const [NFTLogo, setNFTLogo] = useState<File | null>(null);
   const [NFTAttributes, setNFTAttributes] = useState<File | null>(null);
   const [ImagePreviewURL, setImagePreviewURL] = useState<string | null>(null);
@@ -17,7 +18,7 @@ const CreateNFT = () => {
   const attrInputRef = useRef<HTMLInputElement>(null);
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    createNFT({ NFTName, NFTAttributes, NFTLogo, collectionId });
+    createNFT({ NFTName, NFTAttributes, NFTLogo, collectionId, collectionName });
   };
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -88,7 +89,7 @@ const CreateNFT = () => {
                 id="collection-id"
                 className="p-2 rounded bg-gray-200 text-black"
                 value={collectionId}
-                onChange={(e) => setcollectionId(parseInt(e.target.value))}
+                onChange={(e) => {setcollectionId(parseInt(e.target.value)); setCollectionName(e.target.options[e.target.selectedIndex].text)}}
                 required
               >
                 <option value="" disabled>Select a collection</option>
