@@ -130,11 +130,11 @@ To get this done we've the following workflow:
     Then we exert the function genertate metatadata, correctly generating a json metada file, that is uploaded to [gaia](https://docs.stacks.co/concepts/gaia)
     ```js
     const generateMedatada = ({
-    name,
-    collection,
-    attributes,
-    asset_type,
-    image
+        name,
+        collection,
+        attributes,
+        asset_type,
+        image
     }: MetadataProps) => {
     let trait_value: { trait: string; value: string }[] = [];
     // generate the trait-value pairs
