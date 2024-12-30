@@ -136,25 +136,25 @@ To get this done we've the following workflow:
         asset_type,
         image
     }: MetadataProps) => {
-    let trait_value: { trait: string; value: string }[] = [];
-    // generate the trait-value pairs
-    Object.entries(attributes).forEach(([key, value]) => {
-        trait_value.push({
-        "trait": key,
-        "value": value
+        let trait_value: { trait: string; value: string }[] = [];
+        // generate the trait-value pairs
+        Object.entries(attributes).forEach(([key, value]) => {
+            trait_value.push({
+            "trait": key,
+            "value": value
+            });
         });
-    });
-    // return the actual json metadata object
-    return {
-        "sip": 16,
-        "name": name,
-        "properties": {
-        "collection": collection
-        },
-        "attributes": trait_value,
-        "asset_type": asset_type,
-        "image": image
-    }
+        // return the actual json metadata object
+        return {
+            "sip": 16,
+            "name": name,
+            "properties": {
+            "collection": collection
+            },
+            "attributes": trait_value,
+            "asset_type": asset_type,
+            "image": image
+        }
     };
     ```
 
