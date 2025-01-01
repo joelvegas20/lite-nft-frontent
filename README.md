@@ -175,5 +175,90 @@ To get this done we've the following workflow:
             },
         });
     ```
-
 This ensures that the NFT is properly created and stored, making it accessible for future reference and use.
+
+### Architecture diagram
+
+```mermaid
+
+graph TB
+    User((End User))
+    
+    subgraph "Frontend Container"
+        direction TB
+        WebApp["Web Application<br>(Next.js)"]
+        
+        subgraph "Core Components"
+            AuthProvider["Auth Provider<br>(React Context)"]
+            ProfileProvider["Profile Provider<br>(React Context)"]
+            GlobalProvider["Global Provider<br>(React Context)"]
+            Router["Router<br>(Next.js Routes)"]
+        end
+        
+        subgraph "UI Components"
+            Sidebar["Sidebar<br>(React)"]
+            Navbar["Navbar<br>(React)"]
+            Cards["Card Components<br>(React)"]
+            Loader["Spinner Loader<br>(React)"]
+        end
+        
+        subgraph "Feature Components"
+            NFTCreation["NFT Creation<br>(React)"]
+            CollectionCreation["Collection Creation<br>(React)"]
+            ProfileView["Profile View<br>(React)"]
+        end
+    end
+    
+    subgraph "API Container"
+        direction TB
+        APIRoutes["API Routes<br>(Next.js API)"]
+        
+        subgraph "API Endpoints"
+            NFTEndpoints["NFT Endpoints<br>(Next.js API Routes)"]
+            CollectionEndpoints["Collection Endpoints<br>(Next.js API Routes)"]
+        end
+    end
+    
+    subgraph "Blockchain Integration"
+        StacksWallet["Stacks Wallet<br>(@stacks/connect)"]
+        StorageService["Storage Service<br>(@stacks/storage)"]
+        StacksTransaction["Stacks Transaction <br>(@stacks/transaction)"]
+    end
+    
+    subgraph "External Services"
+        ImageService["Image Service<br>(Gamma.io)"]
+        GaiaStorage["Gaia Storage<br>(Hiro)"]
+    end
+
+    %% Relationships
+    User -->|"Interacts with"| WebApp
+    WebApp -->|"Uses"| AuthProvider
+    WebApp -->|"Uses"| ProfileProvider
+    WebApp -->|"Uses"| GlobalProvider
+    WebApp -->|"Routes through"| Router
+    
+    AuthProvider -->|"Authenticates via"| StacksWallet
+    ProfileProvider -->|"Stores data in"| StorageService
+    
+    APIRoutes -->|"Handles NFT operations"| NFTEndpoints
+    APIRoutes -->|"Handles Collection operations"| CollectionEndpoints
+    
+    
+    NFTEndpoints -->|"Interacts with"| StacksTransaction
+    CollectionEndpoints -->|"Interacts with"| StacksTransaction
+    
+    WebApp -->|"Fetches images from"| ImageService
+    StorageService -->|"Stores data in"| GaiaStorage
+    
+    %% UI Component relationships
+    WebApp -->|"Renders"| Sidebar
+    WebApp -->|"Renders"| Navbar
+    WebApp -->|"Uses"| Cards
+    WebApp -->|"Uses"| Loader
+    
+    %% Feature Component relationships
+    Router -->|"Routes to"| NFTCreation
+    Router -->|"Routes to"| CollectionCreation
+    Router -->|"Routes to"| ProfileView
+```
+```
