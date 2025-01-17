@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 import { fetchCallReadOnlyFunction, principalCV } from "@stacks/transactions";
 
 export async function GET(): Promise<Response> {
