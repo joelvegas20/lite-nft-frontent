@@ -1,13 +1,16 @@
-import { fetchCallReadOnlyFunction, makeContractCall,broadcastTransaction, parseReadOnlyResponse, principalCV, uintCV } from "@stacks/transactions";
-import { NextRequest } from "next/server";
+/*
+ * Third Party Dependencies
+ */
+import { makeContractCall,broadcastTransaction, uintCV } from "@stacks/transactions";
+// import { NextRequest } from "next/server";
 
 
-export async function GET(request: NextRequest): Promise<Response> {
-  const collections: Record<string, string>[] = [];
+export async function GET(): Promise<Response> {
+  // const collections: Record<string, string>[] = [];
 
-  const pathSegments = request.nextUrl.pathname.split("/");
-  const address = pathSegments[pathSegments.length - 2];
-  const collectionId = pathSegments[pathSegments.length - 1];
+  // const pathSegments = request.nextUrl.pathname.split("/");
+  // const address = pathSegments[pathSegments.length - 2];
+  // const collectionId = pathSegments[pathSegments.length - 1];
 
   const data = await makeContractCall({
     contractName: "collection-v4",
@@ -28,29 +31,4 @@ export async function GET(request: NextRequest): Promise<Response> {
       )
     )
   );
-
-  // if (data.type === "ok") {
-
-  //   data.value?.value.forEach(({value}) => {
-
-  //     console.log(value)
-
-  //     collections.push({
-  //       subtitle: value.description.value.toString(),
-  //       id: value.id.value.toString(),
-  //       image: value.logo.value.toString(),
-  //       name: value.name.value.toString(),
-  //     });
-  //   });
-
-  //   return Response.json({
-  //     status: "ok",
-  //     data: collections,
-  //   });
-  // }
-
-  // return Response.json({
-  //   status: "error",
-  //   message: "Error Getting Data",
-  // });
 }

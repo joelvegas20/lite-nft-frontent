@@ -1,11 +1,23 @@
-'use client';
+"use client";
 
-import { ClarityValue, cvToJSON, cvToString, cvToValue, getCVTypeString, fetchCallReadOnlyFunction } from "@stacks/transactions";
-import { useAuth } from "@/context/AuthContext";
-import { useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
+/*
+ * Local Dependencies
+ */
 import { RetrieveUserCollection } from "@/lib/RetrieveUserCollections";
-import { generateAvatar } from "../utils/Avatar";
+import { useAuth } from "@/context/AuthContext";
+
+
+/*
+ * Third Party Dependencies
+ */
+import {
+  ClarityValue,
+  cvToValue,
+  fetchCallReadOnlyFunction,
+} from "@stacks/transactions";
+import { ToastContainer } from "react-toastify";
+import { useState } from "react";
+
 
 const TestPage = () => {
   const [response, setResponse] = useState<ClarityValue | null>(null);
@@ -20,12 +32,14 @@ const TestPage = () => {
         functionName: 'get-collections-by-owner',
         functionArgs: [],
         senderAddress: userData?.profile.stxAddress.testnet,
-        network: 'testnet',
+        network: "testnet",
       });
+
       console.log('Data:', data);
       (cvToValue(data) as Array<ClarityValue>).forEach((value: any, index) => {
         console.log(`the element at index ${index} is `, value.value.name.value);
       });
+
       setResponse(data);
       const res = await RetrieveUserCollection();
       console.log('Collections:', res);
@@ -36,15 +50,17 @@ const TestPage = () => {
       console.log("End");
     }
   }
-
   return (
     <div className="flex flex-col w-full justify-center items-center text-white">
       <h1 className="text-center">This is the test page</h1>
-      <button onClick={tryToRetrieveData} className="bg-gray-800 p-2 rounded hover:bg-gray-700 text-white transform transition-transform duration-200">
-        Test to retrieve data 
+      <button
+        onClick={tryToRetrieveData}
+        className="bg-gray-800 p-2 rounded hover:bg-gray-700 text-white transform transition-transform duration-200"
+      >
+        Test to retrieve data
       </button>
-      {response && <p>{response.type}</p>} 
-      <ToastContainer /> 
+      {response && <p>{response.type}</p>}
+      <ToastContainer />
     </div>
   );
 };

@@ -1,4 +1,7 @@
-import { fetchCallReadOnlyFunction, principalCV } from "@stacks/transactions";
+/*
+ * Third Party Dependencies
+ */
+import { fetchCallReadOnlyFunction } from "@stacks/transactions";
 
 export async function GET(): Promise<Response> {
   const data = await fetchCallReadOnlyFunction({
@@ -10,9 +13,7 @@ export async function GET(): Promise<Response> {
     network: "testnet",
   });
 
-  return Response.json(
-    data
-  );
+  return Response.json(data);
 }
 
 // if (data.type === "ok") {

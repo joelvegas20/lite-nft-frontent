@@ -29,10 +29,12 @@ export const ProfileProvider: React.FC<{ children: ReactNode }> = ({
   useEffect(() => {
     const fetchProfile = async () => {
       if (!userSession.isUserSignedIn()) {
-        setProfile(null); // Limpia el perfil si no hay sesión
+        setProfile(null); 
         return;
       }
+
       const sessionData = userSession.loadUserData();
+
       try {
         const storage = new Storage({ userSession });
         const profileData = await storage.getFile("profile.json", {
@@ -62,7 +64,8 @@ export const ProfileProvider: React.FC<{ children: ReactNode }> = ({
           setProfile(parsedProfile);
         }
       } catch (error) {
-        if ((error as any).code === "does_not_exist") {
+        const sessionData = userSession.loadUserData();
+        if ((error as { code: string }).code === "does_not_exist") {
           const profileDefaultImage = await generateAvatar(sessionData.profile.stxAddress.mainnet);
           const defaultProfile: ProfileContextData = {
             name: "",

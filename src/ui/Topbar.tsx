@@ -23,7 +23,7 @@ const Topbar = () => {
 					connected ? (
 						<div className='flex'>
 							<div className={`absolute right-5 top-16 transform transition-transform duration-300 ease-out ${showProfile ? 'scale-100 opacity-100' : 'scale-95 opacity-0'}`}>
-								{showProfile && (<UserDescription userData={userData} logOut={logOut} />)}
+								{showProfile && (<UserDescription userData={userData} logOut={logOut} profilePicture="/test.jpg" />)}
 							</div>
 							<Image src="/test.jpg" alt="Profile" width={40} height={40} className="rounded-full" />
 							<button onClick={toggleProfile}>

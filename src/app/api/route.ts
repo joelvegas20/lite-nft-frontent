@@ -1,7 +1,7 @@
 import { fetchCallReadOnlyFunction, principalCV } from "@stacks/transactions";
 
 export async function GET(): Promise<Response> {
-  const collections: Record<string, string>[] = [];
+  // const collections: Record<string, string>[] = [];
 
   const data = await fetchCallReadOnlyFunction({
     contractName: "collection-v4",
@@ -19,29 +19,4 @@ export async function GET(): Promise<Response> {
       )
     )
   );
-
-  // if (data.type === "ok") {
-
-  //   data.value?.value.forEach(({value}) => {
-
-  //     console.log(value)
-
-  //     collections.push({
-  //       subtitle: value.description.value.toString(),
-  //       id: value.id.value.toString(),
-  //       image: value.logo.value.toString(),
-  //       name: value.name.value.toString(),
-  //     });
-  //   });
-
-  //   return Response.json({
-  //     status: "ok",
-  //     data: collections,
-  //   });
-  // }
-
-  // return Response.json({
-  //   status: "error",
-  //   message: "Error Getting Data",
-  // });
 }
