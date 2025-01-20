@@ -17,7 +17,8 @@ async function getCollections(address) {
 }
 
 async function getNFTs(address) {
-  return await fetch(`/api/collection/${address}`)
+  console.log("Address: ", address);
+  return await fetch(`/api/nft/${address}`)
     .then((res) => res.json())
     .then((res) => res.data);
 }
