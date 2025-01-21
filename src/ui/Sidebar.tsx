@@ -54,7 +54,7 @@ const Sidebar = () => {
   ];
   return (
     <div
-      className={`flex flex-col h-full justify-between items-center px-5 py-5 shadow-xl`}
+      className={`flex flex-col h-screen justify-between items-center px-5 py-5 shadow-xl`}
     >
       <div className="flex flex-col items-center gap-5">
         <p className="text-white italic font-bold tracking-wide">
@@ -65,7 +65,7 @@ const Sidebar = () => {
             <Link
               href={link.href}
               key={index}
-              className={`group w-10 h-10 rounded-full flex justify-center items-center hover:bg-gray-100 transition-colors ${pathname === link.href ? "bg-gray-800" : ""}` }
+              className={`group w-10 h-10 rounded-full flex justify-center items-center hover:bg-gray-100 transition-colors ${pathname === link.href ? "bg-gray-900" : ""}` }
               onClick={() => {console.log(pathname)}}
             >
               <link.icon

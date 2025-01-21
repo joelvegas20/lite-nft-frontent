@@ -7,7 +7,7 @@ export default function Navbar() {
   const { currentProfileSection, setCurrentProfileSection } = useGlobal();
 
   return (
-    <div className="flex shadow-md drop-shadow-2xl h-16 text-white px-10 py-3">
+    <div className="flex shadow-md drop-shadow-2xl max-h-16 text-white px-10 py-3 w-full">
       <div className="flex items-center w-full justify-between">
         <div className="flex bg-[#4D3B3B] font-bold rounded-full p-1">
           <button

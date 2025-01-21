@@ -138,7 +138,7 @@ export default function Card({
             </p>
           </div>
           <div className="flex gap-4 text-sm justify-center w-full h-10 rounded-full">
-            <div className="col-span-2 flex items-center justify-center bg-[#4D3B3B] rounded-full p-4 shadow sshadow-xl ">
+            <div className={`col-span-2 flex items-center justify-center ${variant === 'profile' ? 'bg-gray-900 text-white' : 'bg-gray-300 text-black'} rounded-full p-4 shadow shadow-xl `}>
               {currentPrice ? (
                 <span>
                   {currentPrice} <span className="font-bold">STX</span>
@@ -150,7 +150,7 @@ export default function Card({
                 </span>
               )}
             </div>
-            <button className=" flex text-center items-center justify-center p-4 bg-[#4D3B3B] rounded-full">
+            <button className={`flex text-center items-center justify-center p-4 ${variant === 'profile' ? 'bg-gray-900 text-white' : 'bg-gray-300 text-black'} rounded-full`}>
               <FaBookmark />
             </button>
           </div>

@@ -70,18 +70,18 @@ const CreateNFT = () => {
     return <div className="w-full h-full flex justify-center items-center"><SpinnerLoader /></div>;
   }
   return (
-    <div className="flex justify-center mt-4">
+    <div className="flex justify-center mt-2">
       <form
         onSubmit={handleSubmit}
-        className="w-3/4 flex flex-col text-black p-8 bg-white rounded"
+        className="w-3/4 flex flex-col text-black p-8 bg-white rounded "
       >
-        <h1 className="text-center text-3xl">Create a new NFT</h1>
+        <h1 className="text-center text-2xl">Create a new NFT</h1>
         {/* container of two columns */}
         <div className="flex flex-row w-full gap-10">
           {/* first column */}
           <div className="flex flex-col columna-1 w-1/2">
             <div className="flex flex-col">
-              <label htmlFor="collection-name" className="mt-4">NFT name</label>
+              <label htmlFor="collection-name" className="mt-2">NFT name</label>
               <input
                 type="text"
                 id="collection-name"
@@ -92,7 +92,7 @@ const CreateNFT = () => {
               />
             </div>
             <div className="flex flex-col">
-              <label htmlFor="collection-id" className="mt-4">Collection</label>
+              <label htmlFor="collection-id" className="mt-2">Collection</label>
               <select
                 id="collection-id"
                 className="p-2 rounded bg-gray-200 text-black"
@@ -111,9 +111,9 @@ const CreateNFT = () => {
               </select>
             </div>
             <div className="flex flex-col">
-              <label htmlFor="collection-Attributes" className='mt-4'>NFT Attributes</label>
+              <label htmlFor="collection-Attributes" className='mt-2'>NFT Attributes</label>
               <div className='flex flex-col items-center justify-center bg-gray-200 p-2 text-black rounded h-full'>
-                <label htmlFor="collection-Attributes" className="mt-4 cursor-pointer flex flex-col items-center">
+                <label htmlFor="collection-Attributes" className="mt-2 cursor-pointer flex flex-col items-center">
                   {!AttributeShow &&
                     (
                       <>
@@ -159,7 +159,7 @@ const CreateNFT = () => {
           </div>
           {/* second column */}
           <div className="flex flex-col w-1/2">
-            <label htmlFor="collection-image" className="mt-4 text-center">NFT image</label>
+            <label htmlFor="collection-image" className="mt-2 text-center">NFT image</label>
             <div className="flex flex-col items-center justify-center bg-gray-200 p-2 text-black rounded h-full">
               <label htmlFor="collection-image" className="cursor-pointer flex flex-col items-center">
                 {!ImagePreviewURL &&
@@ -206,7 +206,7 @@ const CreateNFT = () => {
           </div>
         </div>
         <button
-          className="bg-gray-200 p-2 rounded hover:bg-gray-300 text-black transform transition-transform duration-200 mt-4"
+          className="bg-gray-200 p-2 rounded hover:bg-gray-300 text-black transform transition-transform duration-200 mt-2"
           type="submit"
         >
           Create NFT
