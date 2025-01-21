@@ -87,25 +87,13 @@ export const parseCSV = async (
   });
 };
 
-// const getCollectionName = (collectionId: number) => {
-//   const userData = userSession.loadUserData();
-//   fetchCallReadOnlyFunction({
-//     contractAddress: 'ST3GBYD0VN28MAPDGNGTFNXQV5QJXQ3VCV3WZT75T',
-//     contractName: 'collection-v5',
-//     functionName: 'get-collection-name',
-//     senderAddress: userData?.profile.stxAddress.testnet,
-//     functionArgs: [uintCV(collectionId)],
-//     network: 'testnet',
-//   })
-// };
-
 export const createNFT = async ({
   NFTName,
   NFTAttributes,
   NFTLogo,
   collectionId,
   collectionName
-}: NFTCollectionProps) => {
+}: NFTCollectionProps) : Promise <void | string> => {
   const reader = new FileReader();
   reader.onload = async () => {
     try {
@@ -114,7 +102,6 @@ export const createNFT = async ({
       const nftLogoURL = await uploadImage(NFTName, NFTLogo as File);
       // parsing the content into a json object
       const results = await parseCSV(csvContent);
-      // const collectionName = getCollectionName(collectionId);
       const metadata = generateMedatada({
         name: NFTName,
         collection: collectionName,
@@ -126,7 +113,7 @@ export const createNFT = async ({
         NFTName,
         JSON.stringify(metadata)
       ); 
-      openContractCall({
+      await openContractCall({
         contractAddress: "ST3GBYD0VN28MAPDGNGTFNXQV5QJXQ3VCV3WZT75T",
         contractName: "collection-v5",
         functionName: "create-nft",
@@ -140,8 +127,10 @@ export const createNFT = async ({
         network: "testnet",
         onFinish: (data) => {
           console.log("Data:", data);
+          window.location.href = "/profile";
         },
         onCancel: () => {
+          window.location.href = "/create-nft";
           console.log("User cancelled the transaction");
         },
       });

@@ -6,7 +6,7 @@ import { UserDescription } from "./UserDescription";
 import { useAuth } from "@/context/AuthContext";
 import { useProfile } from "@/context/ProfileContext";
 import { ArrowRightIcon } from "@heroicons/react/24/solid";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import Image from "next/image";
 import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
@@ -38,9 +38,6 @@ const Sidebar = () => {
     <div
       className={`flex flex-col h-full justify-between items-center px-5 py-5 shadow-xl`}
     >
-      <div className="absolute">
-        <ToastContainer position="top-left" />
-      </div>
       <p className="text-white">
         <Link href="/">LiteNFT</Link>
       </p>

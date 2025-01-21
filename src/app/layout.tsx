@@ -7,6 +7,7 @@ import "./globals.css";
 import Navbar from "./components/global/Navbar";
 import { ProfileProvider } from "@/context/ProfileContext";
 import { GlobalProvider } from "@/context/GlobalContext";
+import { ToastContainer } from "react-toastify";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",

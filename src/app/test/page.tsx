@@ -1,9 +1,5 @@
 "use client";
 
-/*
- * Local Dependencies
- */
-import { RetrieveUserCollection } from "@/lib/RetrieveUserCollections";
 import { useAuth } from "@/context/AuthContext";
 
 
@@ -27,9 +23,9 @@ const TestPage = () => {
     try {
       console.log("Start data retrieval");
       data = await fetchCallReadOnlyFunction({
-        contractName: 'collection-v5',
+        contractName: 'collection-v4',
         contractAddress: 'ST3GBYD0VN28MAPDGNGTFNXQV5QJXQ3VCV3WZT75T',
-        functionName: 'get-collections-by-owner',
+        functionName: 'get-all-nfts',
         functionArgs: [],
         senderAddress: userData?.profile.stxAddress.testnet,
         network: "testnet",
@@ -41,10 +37,10 @@ const TestPage = () => {
       });
 
       setResponse(data);
-      const res = await RetrieveUserCollection();
-      console.log('Collections:', res);
+      // const res = await RetrieveUserCollection();
+      // console.log('Collections:', res);
     } catch (error) {
-      console.error("Error ", error);
+      console.error("what ", error);
     } 
     finally {
       console.log("End");

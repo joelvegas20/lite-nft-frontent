@@ -1,14 +1,17 @@
 "use client"
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { PhotoIcon, XMarkIcon, TableCellsIcon, ClipboardDocumentListIcon } from '@heroicons/react/24/solid';
 import { createNFT, parseCSV } from '@/lib/createNFT';
 import { RetrieveUserCollection } from '@/lib/RetrieveUserCollections';
-import { redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import SpinnerLoader from '@/ui/SpinnerLoader';
 
 const CreateNFT = () => {
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [NFTName, setNFTName] = useState('');
-  const [collectionId, setcollectionId] = useState<number>(0); 
-  const [collectionName, setCollectionName] = useState<string>(''); 
+  const [collectionId, setcollectionId] = useState<number>(0);
+  const [collectionName, setCollectionName] = useState<string>('');
   const [NFTLogo, setNFTLogo] = useState<File | null>(null);
   const [NFTAttributes, setNFTAttributes] = useState<File | null>(null);
   const [ImagePreviewURL, setImagePreviewURL] = useState<string | null>(null);
@@ -16,9 +19,9 @@ const CreateNFT = () => {
   const [collectionsByOwner, setCollectionsByOwner] = useState<{ id: string, name: string }[]>([]);
   const imageInputRef = useRef<HTMLInputElement>(null);
   const attrInputRef = useRef<HTMLInputElement>(null);
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    createNFT({ NFTName, NFTAttributes, NFTLogo, collectionId, collectionName });
+    await createNFT({ NFTName, NFTAttributes, NFTLogo, collectionId, collectionName });
   };
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -44,22 +47,27 @@ const CreateNFT = () => {
       reader.readAsText(file);
     }
   };
-  const fetchCollections = async () => {
-    try {
-      const collections = await RetrieveUserCollection();
-      if (collections.length === 0) {
-        window.alert('No collections found');
-        return redirect('/create-collection');
+  useEffect(() => {
+    const fetchCollections = async () => {
+      try {
+        const collections = await RetrieveUserCollection();
+        if (collections.length === 0) {
+          router.push('/create-collection?notify=true');
+        } else {
+          setCollectionsByOwner(collections);
+          setCollectionName(collections[0].name);
+          setIsLoading(false);
+        }
+      } catch (error) {
+        console.error(error);
+        setIsLoading(false);
       }
-      setCollectionsByOwner(collections);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  if (collectionsByOwner.length === 0) {
+    };
+
     fetchCollections();
-    console.log('starting retrieval');
-    return <div>Loading...</div>;
+  }, [router]);
+  if (isLoading) {
+    return <div className="w-full h-full flex justify-center items-center"><SpinnerLoader /></div>;
   }
   return (
     <div className="flex justify-center mt-4">
@@ -89,7 +97,7 @@ const CreateNFT = () => {
                 id="collection-id"
                 className="p-2 rounded bg-gray-200 text-black"
                 value={collectionId}
-                onChange={(e) => {setcollectionId(parseInt(e.target.value)); setCollectionName(e.target.options[e.target.selectedIndex].text)}}
+                onChange={(e) => { setcollectionId(parseInt(e.target.value)); setCollectionName(e.target.options[e.target.selectedIndex].text) }}
                 required
               >
                 <option value="" disabled>Select a collection</option>
