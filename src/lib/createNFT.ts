@@ -126,7 +126,6 @@ export const createNFT = async ({
         ],
         network: "testnet",
         onFinish: (data) => {
-          console.log("Data:", data);
           window.location.href = "/profile";
         },
         onCancel: () => {

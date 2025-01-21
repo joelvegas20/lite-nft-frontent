@@ -2,16 +2,18 @@
 
 import { useState, useEffect } from "react";
 import styles from "./Sidebar.module.css";
+import { usePathname } from "next/navigation";
 import { UserDescription } from "./UserDescription";
 import { useAuth } from "@/context/AuthContext";
 import { useProfile } from "@/context/ProfileContext";
-import { ArrowRightIcon } from "@heroicons/react/24/solid";
+import { ArrowRightIcon, BoltIcon, HomeIcon, UserIcon } from "@heroicons/react/24/solid";
 import { toast } from "react-toastify";
 import Image from "next/image";
 import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
 
 const Sidebar = () => {
+  const pathname = usePathname();
   const profile = useProfile();
   const pPicture =
     profile?.profilePicture || "/default-avatar-profile-user.png";
@@ -33,23 +35,53 @@ const Sidebar = () => {
       });
     }
   }, [registerResult]);
-
+  const links = [
+    {
+      name: "Home",
+      icon: HomeIcon,
+      href: "/"
+    },
+    {
+      name: "Profile",
+      icon: UserIcon,
+      href: "/profile"
+    },
+    {
+      name: "Create",
+      icon: BoltIcon,
+      href: "/create-collection"
+    },
+  ];
   return (
     <div
       className={`flex flex-col h-full justify-between items-center px-5 py-5 shadow-xl`}
     >
-      <p className="text-white">
-        <Link href="/">LiteNFT</Link>
-      </p>
+      <div className="flex flex-col items-center gap-5">
+        <p className="text-white italic font-bold tracking-wide">
+          <Link href="/">LiteNFT</Link>
+        </p>
+        <>
+          {links.map((link, index) => (
+            <Link
+              href={link.href}
+              key={index}
+              className={`group w-10 h-10 rounded-full flex justify-center items-center hover:bg-gray-100 transition-colors ${pathname === link.href ? "bg-gray-800" : ""}` }
+              onClick={() => {console.log(pathname)}}
+            >
+              <link.icon
+                className="h-6 w-6 text-white group-hover:text-gray-900 transition-colors"
+              />
+            </Link>
+          ))}
+        </>
+      </div>
       <div>
         {connected ? (
           <div className="flex">
             <div
-              className={`absolute transform transition-transform transition-opacity duration-300 ease-out ${
-                styles.UserDescriptionContainer
-              } ${
-                showProfile ? "scale-100 opacity-100" : "scale-95 opacity-0"
-              }`}
+              className={`absolute transform transition-transform transition-opacity duration-300 ease-out ${styles.UserDescriptionContainer
+                } ${showProfile ? "scale-100 opacity-100" : "scale-95 opacity-0"
+                }`}
             >
               {showProfile && (
                 <UserDescription
@@ -68,9 +100,8 @@ const Sidebar = () => {
             />
             <button onClick={toggleProfile}>
               <ArrowRightIcon
-                className={`text-white h-6 w-6 text-gray-800 transition-transform duration-300 ${
-                  showProfile ? "rotate-180" : "rotate-0"
-                }`}
+                className={`text-white h-6 w-6 text-gray-800 transition-transform duration-300 ${showProfile ? "rotate-180" : "rotate-0"
+                  }`}
               />
             </button>
           </div>
