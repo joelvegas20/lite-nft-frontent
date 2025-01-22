@@ -4,9 +4,11 @@ import React, { useRef, useState, useEffect } from 'react';
 import { PhotoIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import { createCollection } from '@/lib/createCollection';
 import { ToastContainer, toast } from 'react-toastify';
+import SpinnerLoader from '@/ui/SpinnerLoader';
 
 const CreateCollection = () => {
   const [notificationHasBeenShown, setNotificationHasBeenShown] = useState(false);
+  const [isLoadingContract, setIsLoadingContract] = useState<boolean>(false);
   const [collectionName, setCollectionName] = useState('');
   const [collectionQuantity, setCollectionQuantity] = useState('');
   const [collectionDescription, setCollectionDescription] = useState('');
@@ -28,6 +30,7 @@ const CreateCollection = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoadingContract(true);
     if (isNaN(Number(collectionQuantity))) {
       alert('Collection quantity must be a number');
       return;
@@ -48,7 +51,7 @@ const CreateCollection = () => {
   };
 
   return (
-    <div className="flex justify-center mt-4">
+    <div className="relative flex justify-center mt-4">
       <form
         onSubmit={handleSubmit}
         className="w-3/4 flex flex-col text-black p-8 bg-white rounded shadow-lg"
@@ -139,6 +142,12 @@ const CreateCollection = () => {
           Create collection
         </button>
       </form>
+      {
+        isLoadingContract &&
+        <div className='absolute w-3/4 h-full bg-gray-700 opacity-75 flex justify-center items-center'>
+          <SpinnerLoader />
+        </div>
+      }
     </div>
   );
 };

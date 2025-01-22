@@ -38,7 +38,7 @@ export const createCollection = async ({
       window.location.href = '/profile';
     },
     onCancel: () => {
-      console.log('User cancelled the transaction');
+      window.location.href = '/create-collection';
     },
   });
 };

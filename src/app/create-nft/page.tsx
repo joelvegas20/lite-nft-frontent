@@ -9,6 +9,7 @@ import SpinnerLoader from '@/ui/SpinnerLoader';
 const CreateNFT = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoadingContract, setIsLoadingContract] = useState<boolean>(false);
   const [NFTName, setNFTName] = useState('');
   const [collectionId, setcollectionId] = useState<number>(0);
   const [collectionName, setCollectionName] = useState<string>('');
@@ -21,7 +22,8 @@ const CreateNFT = () => {
   const attrInputRef = useRef<HTMLInputElement>(null);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await createNFT({ NFTName, NFTAttributes, NFTLogo, collectionId, collectionName });
+    setIsLoadingContract(true);
+    createNFT({ NFTName, NFTAttributes, NFTLogo, collectionId, collectionName });
   };
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -70,7 +72,7 @@ const CreateNFT = () => {
     return <div className="w-full h-full flex justify-center items-center"><SpinnerLoader /></div>;
   }
   return (
-    <div className="flex justify-center mt-2">
+    <div className="relative flex justify-center mt-2">
       <form
         onSubmit={handleSubmit}
         className="w-3/4 flex flex-col text-black p-8 bg-white rounded "
@@ -212,6 +214,12 @@ const CreateNFT = () => {
           Create NFT
         </button>
       </form>
+      {
+        isLoadingContract &&
+        <div className='absolute w-3/4 h-full bg-gray-700 opacity-75 flex justify-center items-center'>
+          <SpinnerLoader />
+        </div>
+      }
     </div>
   );
 }
