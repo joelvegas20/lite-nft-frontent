@@ -38,14 +38,6 @@ export async function GET(request: NextRequest): Promise<Response> {
     });
   }
 
-  // return Response.json(
-  //   JSON.parse(
-  //     JSON.stringify(data, (key, value) =>
-  //       typeof value === "bigint" ? value.toString() : value
-  //     )
-  //   )
-  // );
-
   return Response.json({
     status: data.type,
     data: collections,

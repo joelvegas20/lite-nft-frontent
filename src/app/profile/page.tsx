@@ -2,10 +2,10 @@
 import React, { useState, useEffect } from "react";
 import { useProfile } from "@/context/ProfileContext";
 import { useGlobal } from "@/context/GlobalContext";
- // Asegúrate de que el path sea correcto
 import Card from "../components/global/card/Card";
 import SpinnerLoader from "@/ui/SpinnerLoader";
 import { shortenAddress } from "../utils/Address";
+import { userSession } from "@/lib/Wallet";
 
 const STATIC_IMAGE_URL =
   "https://images.gamma.io/ipfs/QmcAqUQDJ1bcLZVtCqJduLReGYyWm9TjdcHzAqNDEV5r24/images/1109.webp";
@@ -36,6 +36,12 @@ const Profile = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+
+    // Verify if user is logged in
+    if(!userSession.isUserSignedIn()) {
+      window.location.href = "/";
+    }
+
     if (profile) {
       if (profile.name === "not name" || profile.name === "") {
         setProfileCardData({
