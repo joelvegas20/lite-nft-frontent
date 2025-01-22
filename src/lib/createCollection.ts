@@ -35,6 +35,7 @@ export const createCollection = async ({
     network: 'testnet',
     onFinish: (data) => {
       console.log('Data:', data);
+      window.location.href = '/profile';
     },
     onCancel: () => {
       console.log('User cancelled the transaction');

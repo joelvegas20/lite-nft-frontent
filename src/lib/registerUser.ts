@@ -7,7 +7,7 @@ export const registerUser = async () => {
   try {
     const userData = userSession.loadUserData();
     const userExist = await fetchCallReadOnlyFunction({
-      contractName: 'auth-v2',
+      contractName: 'auth-v3',
       contractAddress: 'ST3GBYD0VN28MAPDGNGTFNXQV5QJXQ3VCV3WZT75T',
       functionName: 'get-user-data',
       functionArgs: [principalCV(userData?.profile.stxAddress.testnet)],
@@ -18,9 +18,9 @@ export const registerUser = async () => {
       console.log("User does not exist, registering user...");
       const result = await openContractCall({
         contractAddress: 'ST3GBYD0VN28MAPDGNGTFNXQV5QJXQ3VCV3WZT75T',
-        contractName: 'auth-v2',
+        contractName: 'auth-v3',
         functionName: 'login',
-        functionArgs: [principalCV(userData?.profile.stxAddress.testnet), stringAsciiCV('https://cdn-icons-png.flaticon.com/512/10061/10061823.png')],
+        functionArgs: [principalCV(userData?.profile.stxAddress.testnet), stringAsciiCV('gen-from-'+userData?.profile.stxAddress.testnet)],
         senderKey: userSession.loadUserData().appPrivateKey,
         network: STACKS_TESTNET,
         onCancel: () => {
@@ -35,7 +35,7 @@ export const registerUser = async () => {
       return result;
     }
     const result = await fetchCallReadOnlyFunction({
-      contractName: 'auth-v2',
+      contractName: 'auth-v3',
       contractAddress: 'ST3GBYD0VN28MAPDGNGTFNXQV5QJXQ3VCV3WZT75T',
       functionName: 'login',
       functionArgs: [principalCV(userData?.profile.stxAddress.testnet), stringAsciiCV(userData?.profile.stxAddress.testnet)],

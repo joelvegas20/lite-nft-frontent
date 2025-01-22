@@ -1,18 +1,24 @@
-// components/Card.tsx
-
-import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
+/*
+ * Local Dependencies
+ */
 import {
   extractColorFromImage,
   parseRGBColor,
   isColorLight,
 } from "@/app/utils/Colors";
-import { FaBookmark } from "react-icons/fa";
-import { LuImages } from "react-icons/lu";
 import styles from '@/ui/Card.module.css';
 
+/*
+ * Third Party Dependencies
+ */
+import { useEffect, useRef, useState } from "react";
+import { FaBookmark } from "react-icons/fa";
+import { LuImages } from "react-icons/lu";
+import Image from "next/image";
+
+
 interface CardProps {
-  variant?: "profile" | "section"; // Propiedad para determinar la variante
+  variant?: "profile" | "section";
   ownerTitle: string;
   ownerSubtitle: string;
   ownerPicture: string;
@@ -25,14 +31,14 @@ interface CardProps {
 }
 
 export default function Card({
-  variant = "profile", // Valor por defecto
+  variant = "profile",
   ownerTitle,
   ownerSubtitle,
   ownerPicture,
   title,
   subtitle,
   currentPrice,
-  pinned,
+  // pinned,
   quantity,
   image,
 }: CardProps) {
@@ -42,7 +48,6 @@ export default function Card({
   useEffect(() => {
     const urlToUse = image;
 
-    // Solo recalcular si la URL cambió
     if (prevImageUrl.current !== urlToUse) {
       prevImageUrl.current = urlToUse;
       (async () => {
@@ -59,17 +64,15 @@ export default function Card({
 
   const parsedColor = parseRGBColor(dominantColor);
   let textColorClass = "text-white";
-  let backgroundColorOverlay = dominantColor; // Fondo original, sólido
+  // let backgroundColorOverlay = dominantColor; // Fondo original, sólido
 
   if (parsedColor) {
     const { r, g, b } = parsedColor;
     const isLightBg = isColorLight(r, g, b);
     textColorClass = isLightBg ? "text-black" : "text-white";
-    // Para ver la imagen detrás, agregamos transparencia al fondo.
-    backgroundColorOverlay = `rgba(${r}, ${g}, ${b}, 0.5)`; // 50% transparencia
+    // backgroundColorOverlay = `rgba(${r}, ${g}, ${b}, 0.5)`; // 50% transparencia
   }
 
-  // Definir clases condicionales basadas en la variante usando ternarios
   const containerPadding = variant === "profile" ? "p-4" : "p-2";
   const imageSize =
     variant === "profile"
@@ -83,8 +86,8 @@ export default function Card({
     variant === "profile"
       ? "text-fluid-sm sm:text-fluid-md"
       : "text-xs sm:text-sm";
-  const buttonClass =
-    variant === "profile" ? "px-3 py-2 text-sm" : "px-2 py-1 text-xs";
+  // const buttonClass =
+  //   variant === "profile" ? "px-3 py-2 text-sm" : "px-2 py-1 text-xs";
   // const cardSizeSection = "w-72 h-96";
   return (
     <div
@@ -135,7 +138,7 @@ export default function Card({
             </p>
           </div>
           <div className="flex gap-4 text-sm justify-center w-full h-10 rounded-full">
-            <div className="col-span-2 flex items-center justify-center bg-[#4D3B3B] rounded-full p-4 shadow sshadow-xl ">
+            <div className={`col-span-2 flex items-center justify-center ${variant === 'profile' ? 'bg-gray-900 text-white' : 'bg-gray-300 text-black'} rounded-full p-4 shadow shadow-xl `}>
               {currentPrice ? (
                 <span>
                   {currentPrice} <span className="font-bold">STX</span>
@@ -147,7 +150,7 @@ export default function Card({
                 </span>
               )}
             </div>
-            <button className=" flex text-center items-center justify-center p-4 bg-[#4D3B3B] rounded-full">
+            <button className={`flex text-center items-center justify-center p-4 ${variant === 'profile' ? 'bg-gray-900 text-white' : 'bg-gray-300 text-black'} rounded-full`}>
               <FaBookmark />
             </button>
           </div>

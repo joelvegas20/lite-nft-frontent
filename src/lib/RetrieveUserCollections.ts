@@ -21,6 +21,6 @@ export const RetrieveUserCollection = async () => {
     return collectionNames;
   } catch (error) {
     console.error("Error at retrieval collection names: ", error);
-    throw new Error("Error at retrieval collection names");
+    return [];
   }
 };

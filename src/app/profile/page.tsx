@@ -17,7 +17,8 @@ async function getCollections(address) {
 }
 
 async function getNFTs(address) {
-  return await fetch(`/api/collection/${address}`)
+  console.log("Address: ", address);
+  return await fetch(`/api/nft/${address}`)
     .then((res) => res.json())
     .then((res) => res.data);
 }
@@ -80,11 +81,11 @@ const Profile = () => {
 
 
   return (
-    <div className="h-full w-full p-8 text-white">
+    <div className="p-8 text-white h-full">
       <div className="flex gap-4 h-full">
         <div className="flex flex-col gap-4 w-3/5">
-          <div className="flex flex-col h-1/2">
-            <h2 className="text-4xl font-bold mb-4">
+          <div className="flex flex-col ">
+            <h2 className="text-2xl font-bold mb-4">
               Your {currentProfileSection}
             </h2>
             <div className="flex w-full h-full">
@@ -93,9 +94,9 @@ const Profile = () => {
                   <SpinnerLoader />
                 </div>
               ) : (
-                <div className="flex gap-4 h-full px-4 py-2 w-full overflow-x-scroll overflow-scroll">
+                <div className="cards-container flex gap-4 h-full px-4 py-2 max-w-xl w-full overflow-x-scroll overflow-y-hidden" style={{ scrollbarWidth: "none" }}>
                   {items.map((item, index) => (
-                    <div className="w-[30rem] h-38" key={index}>
+                    <div className="h-38" key={index}>
                       <Card
                         variant="section"
                         ownerTitle={item.ownerTitle}
@@ -115,13 +116,13 @@ const Profile = () => {
             </div>
           </div>
 
-          <div className="flex flex-col h-1/2">
-            <h2 className="text-4xl font-bold mb-6">History</h2>
+          <div className="flex flex-col">
+            <h2 className="text-2xl font-bold mb-6">History</h2>
             <div className="bg-[#655454] h-full rounded-2xl"></div>
           </div>
         </div>
 
-        <div className="w-2/5">
+        <div className="w-2/5 max-w-sm h-full">
           <Card
             variant="profile"
             ownerTitle={profileCardData.title}

@@ -1,15 +1,29 @@
 "use client"
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { PhotoIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import { createCollection } from '@/lib/createCollection';
+import { ToastContainer, toast } from 'react-toastify';
 
 const CreateCollection = () => {
+  const [notificationHasBeenShown, setNotificationHasBeenShown] = useState<boolean>(false);
+  const searchParams = useSearchParams();
+  const notify = searchParams.get('notify');
   const [collectionName, setCollectionName] = useState('');
   const [collectionQuantity, setCollectionQuantity] = useState('');
   const [collectionDescription, setCollectionDescription] = useState('');
   const [collectionImage, setCollectionImage] = useState<File | null>(null);
   const [previewURL, setPreviewURL] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    if (!notificationHasBeenShown && notify === 'true') {
+      setNotificationHasBeenShown(true);
+      toast.info('You need to create a collection first!', {
+        position: 'top-left',
+        autoClose: 3000,
+      });
+    }
+  }, [notify, notificationHasBeenShown]);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     // verify if the collection quantity is a number
@@ -20,7 +34,6 @@ const CreateCollection = () => {
     await createCollection({ collectionName, collectionDescription, collectionImage });
   };
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("this is the targe of the image ", e.target.files);
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       setCollectionImage(e.target.files[0]);
@@ -37,6 +50,9 @@ const CreateCollection = () => {
         onSubmit={handleSubmit}
         className="w-3/4 flex flex-col text-black p-8 bg-white rounded shadow-lg"
       >
+        <div className="absolute">
+          <ToastContainer position="top-left" />
+        </div>
         <h1 className="text-center text-3xl">Create a new collection</h1>
         {/* container of two columns */}
         <div className="flex flex-row w-full gap-10">

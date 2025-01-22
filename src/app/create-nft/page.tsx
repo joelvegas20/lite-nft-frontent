@@ -1,14 +1,17 @@
 "use client"
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { PhotoIcon, XMarkIcon, TableCellsIcon, ClipboardDocumentListIcon } from '@heroicons/react/24/solid';
 import { createNFT, parseCSV } from '@/lib/createNFT';
 import { RetrieveUserCollection } from '@/lib/RetrieveUserCollections';
-import { redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import SpinnerLoader from '@/ui/SpinnerLoader';
 
 const CreateNFT = () => {
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [NFTName, setNFTName] = useState('');
-  const [collectionId, setcollectionId] = useState<number>(0); 
-  const [collectionName, setCollectionName] = useState<string>(''); 
+  const [collectionId, setcollectionId] = useState<number>(0);
+  const [collectionName, setCollectionName] = useState<string>('');
   const [NFTLogo, setNFTLogo] = useState<File | null>(null);
   const [NFTAttributes, setNFTAttributes] = useState<File | null>(null);
   const [ImagePreviewURL, setImagePreviewURL] = useState<string | null>(null);
@@ -16,9 +19,9 @@ const CreateNFT = () => {
   const [collectionsByOwner, setCollectionsByOwner] = useState<{ id: string, name: string }[]>([]);
   const imageInputRef = useRef<HTMLInputElement>(null);
   const attrInputRef = useRef<HTMLInputElement>(null);
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    createNFT({ NFTName, NFTAttributes, NFTLogo, collectionId, collectionName });
+    await createNFT({ NFTName, NFTAttributes, NFTLogo, collectionId, collectionName });
   };
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -44,36 +47,41 @@ const CreateNFT = () => {
       reader.readAsText(file);
     }
   };
-  const fetchCollections = async () => {
-    try {
-      const collections = await RetrieveUserCollection();
-      if (collections.length === 0) {
-        window.alert('No collections found');
-        return redirect('/create-collection');
+  useEffect(() => {
+    const fetchCollections = async () => {
+      try {
+        const collections = await RetrieveUserCollection();
+        if (collections.length === 0) {
+          router.push('/create-collection?notify=true');
+        } else {
+          setCollectionsByOwner(collections);
+          setCollectionName(collections[0].name);
+          setIsLoading(false);
+        }
+      } catch (error) {
+        console.error(error);
+        setIsLoading(false);
       }
-      setCollectionsByOwner(collections);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  if (collectionsByOwner.length === 0) {
+    };
+
     fetchCollections();
-    console.log('starting retrieval');
-    return <div>Loading...</div>;
+  }, [router]);
+  if (isLoading) {
+    return <div className="w-full h-full flex justify-center items-center"><SpinnerLoader /></div>;
   }
   return (
-    <div className="flex justify-center mt-4">
+    <div className="flex justify-center mt-2">
       <form
         onSubmit={handleSubmit}
-        className="w-3/4 flex flex-col text-black p-8 bg-white rounded"
+        className="w-3/4 flex flex-col text-black p-8 bg-white rounded "
       >
-        <h1 className="text-center text-3xl">Create a new NFT</h1>
+        <h1 className="text-center text-2xl">Create a new NFT</h1>
         {/* container of two columns */}
         <div className="flex flex-row w-full gap-10">
           {/* first column */}
           <div className="flex flex-col columna-1 w-1/2">
             <div className="flex flex-col">
-              <label htmlFor="collection-name" className="mt-4">NFT name</label>
+              <label htmlFor="collection-name" className="mt-2">NFT name</label>
               <input
                 type="text"
                 id="collection-name"
@@ -84,12 +92,12 @@ const CreateNFT = () => {
               />
             </div>
             <div className="flex flex-col">
-              <label htmlFor="collection-id" className="mt-4">Collection</label>
+              <label htmlFor="collection-id" className="mt-2">Collection</label>
               <select
                 id="collection-id"
                 className="p-2 rounded bg-gray-200 text-black"
                 value={collectionId}
-                onChange={(e) => {setcollectionId(parseInt(e.target.value)); setCollectionName(e.target.options[e.target.selectedIndex].text)}}
+                onChange={(e) => { setcollectionId(parseInt(e.target.value)); setCollectionName(e.target.options[e.target.selectedIndex].text) }}
                 required
               >
                 <option value="" disabled>Select a collection</option>
@@ -103,9 +111,9 @@ const CreateNFT = () => {
               </select>
             </div>
             <div className="flex flex-col">
-              <label htmlFor="collection-Attributes" className='mt-4'>NFT Attributes</label>
+              <label htmlFor="collection-Attributes" className='mt-2'>NFT Attributes</label>
               <div className='flex flex-col items-center justify-center bg-gray-200 p-2 text-black rounded h-full'>
-                <label htmlFor="collection-Attributes" className="mt-4 cursor-pointer flex flex-col items-center">
+                <label htmlFor="collection-Attributes" className="mt-2 cursor-pointer flex flex-col items-center">
                   {!AttributeShow &&
                     (
                       <>
@@ -151,7 +159,7 @@ const CreateNFT = () => {
           </div>
           {/* second column */}
           <div className="flex flex-col w-1/2">
-            <label htmlFor="collection-image" className="mt-4 text-center">NFT image</label>
+            <label htmlFor="collection-image" className="mt-2 text-center">NFT image</label>
             <div className="flex flex-col items-center justify-center bg-gray-200 p-2 text-black rounded h-full">
               <label htmlFor="collection-image" className="cursor-pointer flex flex-col items-center">
                 {!ImagePreviewURL &&
@@ -198,7 +206,7 @@ const CreateNFT = () => {
           </div>
         </div>
         <button
-          className="bg-gray-200 p-2 rounded hover:bg-gray-300 text-black transform transition-transform duration-200 mt-4"
+          className="bg-gray-200 p-2 rounded hover:bg-gray-300 text-black transform transition-transform duration-200 mt-2"
           type="submit"
         >
           Create NFT

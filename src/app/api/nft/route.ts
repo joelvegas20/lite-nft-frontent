@@ -1,8 +1,8 @@
-import { fetchCallReadOnlyFunction, principalCV } from "@stacks/transactions";
-import { NextRequest } from "next/server";
+export const runtime = 'nodejs';
 
 
-export async function GET(request: NextRequest): Promise<Response> {
+
+export async function GET(): Promise<Response> {
 
   return Response.json({
     message: "Implement This route: /api/nft | Return all available NFTs",

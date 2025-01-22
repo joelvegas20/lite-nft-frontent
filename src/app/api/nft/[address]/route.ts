@@ -1,8 +1,9 @@
-import {
-  cvToJSON,
-  fetchCallReadOnlyFunction,
-  principalCV,
-} from "@stacks/transactions";
+export const runtime = 'nodejs';
+
+/*
+ * Third Party Dependencies
+ */
+import { fetchCallReadOnlyFunction } from "@stacks/transactions";
 import { NextRequest } from "next/server";
 
 export async function GET(request: NextRequest): Promise<Response> {
@@ -11,7 +12,7 @@ export async function GET(request: NextRequest): Promise<Response> {
   const pathSegments = request.nextUrl.pathname.split("/");
   const address = pathSegments[pathSegments.length - 1];
 
-  console.log(address)
+  console.log(address);
 
   const data = await fetchCallReadOnlyFunction({
     contractName: "collection-v5",
@@ -20,35 +21,33 @@ export async function GET(request: NextRequest): Promise<Response> {
     functionArgs: [],
     senderAddress: address,
     network: "testnet",
+  }) as any;
+
+  if (data.type === "list") {
+    data.value.forEach(({ value }) => {
+      if (value.type === "none") return;
+
+      const item = value;
+
+      collections.push({
+        subtitle: "",
+        id: item.id.value.toString(),
+        image: item.image.value.toString(),
+        name: item.name.value.toString(),
+      });
+    });
+  }
+
+  // return Response.json(
+  //   JSON.parse(
+  //     JSON.stringify(data, (key, value) =>
+  //       typeof value === "bigint" ? value.toString() : value
+  //     )
+  //   )
+  // );
+
+  return Response.json({
+    status: data.type,
+    data: collections,
   });
-
-  console.log(data)
-
-  // if (data.type === "list") {
-  //   data.value.forEach(({ value }) => {
-  //     if (value.type === "none") return;
-
-  //     const item = value;
-
-  //     collections.push({
-  //       subtitle: item.description.value.toString(),
-  //       id: item.id.value.toString(),
-  //       image: item.logo.value.toString(),
-  //       name: item.name.value.toString(),
-  //     });
-  //   });
-  // }
-
-  return Response.json(
-    JSON.parse(
-      JSON.stringify(data, (key, value) =>
-        typeof value === "bigint" ? value.toString() : value
-      )
-    )
-  );
-
-      // return Response.json({
-      //   status: data.type,
-      //   data: collections,
-      // });
 }

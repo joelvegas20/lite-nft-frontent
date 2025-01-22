@@ -1,3 +1,15 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript"]
+  "extends": ["next/core-web-vitals", "next/typescript"],
+  "rules": {
+    "@typescript-eslint/ban-ts-comment": [
+      "error",
+      {
+        "ts-ignore": true, // Mantén advertencias para ts-ignore
+        "ts-expect-error": {
+          "descriptionFormat": ".*", // No requiere una descripción
+          "minimumDescriptionLength": 0 // No requiere un mínimo de caracteres
+        }
+      }
+    ]
+  }
 }

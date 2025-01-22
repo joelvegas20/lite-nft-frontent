@@ -7,6 +7,7 @@ import "./globals.css";
 import Navbar from "./components/global/Navbar";
 import { ProfileProvider } from "@/context/ProfileContext";
 import { GlobalProvider } from "@/context/GlobalContext";
+import { ToastContainer } from "react-toastify";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -32,16 +33,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex min-h-screen`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased flex w-screen`} 
       >
         <GlobalProvider>
           <AuthProvider>
             <ProfileProvider>
-              <div className="flex min-h-screen">
-                <Sidebar />
+              <div className="flex w-full h-full">
+                <Sidebar />   
                 <div
-                  className="flex flex-col flex-grow"
-                  style={{ width: "90%" }}
+                  className="content-container flex flex-col w-full h-full"
                 >
                   <Navbar />
                   {children}
