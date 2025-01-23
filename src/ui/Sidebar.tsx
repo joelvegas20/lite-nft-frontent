@@ -54,7 +54,7 @@ const Sidebar = () => {
   ];
   return (
     <div
-      className={`flex flex-col h-screen justify-between items-center px-5 py-5 shadow-xl`}
+      className={`sticky top-0 flex flex-col h-screen justify-between items-center px-5 py-5 shadow-xl`}
     >
       <div className="flex flex-col items-center gap-5">
         <p className="text-white italic font-bold tracking-wide">

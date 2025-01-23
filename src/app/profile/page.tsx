@@ -87,8 +87,8 @@ const Profile = () => {
 
 
   return (
-    <div className="p-8 text-white h-full">
-      <div className="flex gap-4 h-full">
+    <div className="py-8 pl-2 text-white h-full">
+      <div className="flex gap-4 h-full w-full">
         <div className="flex flex-col gap-4 w-3/5">
           <div className="flex flex-col ">
             <h2 className="text-2xl font-bold mb-4">
