@@ -5,6 +5,7 @@ import { createNFT, parseCSV } from '@/lib/createNFT';
 import { RetrieveUserCollection } from '@/lib/RetrieveUserCollections';
 import { useRouter } from 'next/navigation';
 import SpinnerLoader from '@/ui/SpinnerLoader';
+import { userSession } from '@/lib/Wallet';
 
 const CreateNFT = () => {
   const router = useRouter();
@@ -50,6 +51,9 @@ const CreateNFT = () => {
     }
   };
   useEffect(() => {
+    if (!userSession.isUserSignedIn()) {
+      window.location.href = "/";
+    }
     const fetchCollections = async () => {
       try {
         const collections = await RetrieveUserCollection();
