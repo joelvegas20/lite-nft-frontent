@@ -15,7 +15,7 @@ export const UserDescription = ({
     return null;
   }
   return (
-    <div className={`flex items-center flex-row bg-gray-300 p-3 border-box rounded ${styles.UserDescriptionContainer}`}>
+    <div className={`flex z-50 items-center flex-row bg-gray-300 p-3 border-box rounded ${styles.UserDescriptionContainer}`}>
       <Image src={profilePicture} alt="Profile" width={80} height={80} className="rounded-full" />
       <div className="flex flex-col justify-content-center items-center">
         <p className={`my-2 ${styles.AdressText}`}>{userData?.profile.stxAddress.testnet.slice(0, 5) + "..." + userData?.profile.stxAddress.testnet.slice(-5)}</p>
