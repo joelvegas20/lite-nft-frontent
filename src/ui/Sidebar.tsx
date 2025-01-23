@@ -6,7 +6,8 @@ import { usePathname } from "next/navigation";
 import { UserDescription } from "./UserDescription";
 import { useAuth } from "@/context/AuthContext";
 import { useProfile } from "@/context/ProfileContext";
-import { ArrowRightIcon, BoltIcon, HomeIcon, UserIcon } from "@heroicons/react/24/solid";
+import { ArrowRightIcon, FolderPlusIcon, HomeIcon, UserIcon } from "@heroicons/react/24/solid";
+import nftLogo from "@/app/components/icons/nftLogo";
 import { toast } from "react-toastify";
 import Image from "next/image";
 import "react-toastify/dist/ReactToastify.css";
@@ -47,10 +48,15 @@ const Sidebar = () => {
       href: "/profile"
     },
     {
-      name: "Create",
-      icon: BoltIcon,
-      href: "/create-collection"
+      name: "Create NFT",
+      icon: nftLogo,
+      href: "/create-nft"
     },
+    {
+      name: "Creat Collection",
+      icon: FolderPlusIcon,
+      href: "/create-collection"
+    }
   ];
   return (
     <div
@@ -66,10 +72,9 @@ const Sidebar = () => {
               href={link.href}
               key={index}
               className={`group w-10 h-10 rounded-full flex justify-center items-center hover:bg-gray-100 transition-colors ${pathname === link.href ? "bg-gray-900" : ""}` }
-              onClick={() => {console.log(pathname)}}
             >
               <link.icon
-                className="h-6 w-6 text-white group-hover:text-gray-900 transition-colors"
+                className={`h-6 w-6 text-white group-hover:text-gray-900 transition-colors ${link.name.includes('Create') ? 'hover:invert' : ''}`}
               />
             </Link>
           ))}

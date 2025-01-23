@@ -42,23 +42,23 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="h-full pl-8 pt-8 box-border text-white">
-      <main className="flex flex-col gap-8 h-full">
+    <div className="h-full flex justify-center items-center p-8 text-white overflow-x-hidden">
+      <main className="flex flex-col gap-8">
         <div className="flex flex-col gap-5">
           <h1 className="font-black text-2xl">Welcome to Lite NFT Gallery</h1>
           <p className="font-normal text-xl">
             Explore, design, and create collections and nfts.
           </p>
         </div>
-        <div className=" flex flex-col gap-4 w-3/4">
-          <div className="flex flex-col h-1/2 w-full max-w-2xl">
+        <div className="flex flex-col gap-2 w-3/4">
+          <div className="flex flex-col h-1/2 w-full">
             <span className=" font-black text-2xl">Top NFTs</span>
             {isLoading ? (
               <div className="flex justify-center items-center w-full">
                 <SpinnerLoader />
               </div>
             ) : (
-              <div className="cards-container flex gap-4 h-full px-4 py-2 w-full overflow-x-scroll">
+              <div className="cards-container flex h-full pt-2 w-full overflow-x-scroll">
                 {nfts.map((item, index) => (
                   <div className="h-38" key={index}>
                     <Card
@@ -78,14 +78,14 @@ const Home = () => {
               </div>
             )}
           </div>
-          <div className="flex flex-col gap-2 2bg-lime-500 w-full max-w-2xl">
+          <div className="flex flex-col w-full">
             <span className="font-black text-2xl">Top Collections</span>
             {isLoading ? (
               <div className="flex justify-center items-center w-full">
                 <SpinnerLoader />
               </div>
             ) : (
-              <div className="cards-container flex gap-4 h-full px-4 py-2 w-full overflow-x-scroll overflow-y-hidden">
+              <div className="cards-container flex gap-4 h-full pt-2 w-full overflow-x-scroll overflow-y-hidden">
                 {collections.map((item, index) => (
                   <div className=" h-38" key={index}>
                     <Card
