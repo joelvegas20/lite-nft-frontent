@@ -42,7 +42,7 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="h-full flex justify-center items-center p-8 text-white overflow-x-hidden">
+    <div className="h-full flex justify-center items-center p-8 text-white">
       <main className="flex flex-col gap-8">
         <div className="flex flex-col gap-5">
           <h1 className="font-black text-2xl">Welcome to Lite NFT Gallery</h1>

@@ -5,6 +5,7 @@ import { PhotoIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import { createCollection } from '@/lib/createCollection';
 import { ToastContainer, toast } from 'react-toastify';
 import SpinnerLoader from '@/ui/SpinnerLoader';
+import { userSession } from '@/lib/Wallet';
 
 const CreateCollection = () => {
   const [notificationHasBeenShown, setNotificationHasBeenShown] = useState(false);
@@ -17,6 +18,9 @@ const CreateCollection = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
+    if (!userSession.isUserSignedIn()) {
+      window.location.href = "/";
+    }
     const params = new URLSearchParams(window.location.search);
     const notify = params.get('notify');
     if (!notificationHasBeenShown && notify === 'true') {
