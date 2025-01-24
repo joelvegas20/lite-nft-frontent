@@ -39,7 +39,7 @@ const Profile = () => {
 
     // Verify if user is logged in
     if(!userSession.isUserSignedIn()) {
-      window.location.href = "/?notify-login=true";
+      window.location.href = "/";
     }
 
     if (profile) {
@@ -105,7 +105,6 @@ const Profile = () => {
                     <div className="h-38" key={index}>
                       <Card
                         variant="section"
-                        id={`${currentProfileSection}-${item.id}`}
                         ownerTitle={item.ownerTitle}
                         ownerSubtitle={item.ownerSubtitle}
                         ownerPicture={item.ownerPicture}
@@ -132,7 +131,6 @@ const Profile = () => {
         <div className="w-2/5 max-w-sm h-full">
           <Card
             variant="profile"
-            id="x"
             ownerTitle={profileCardData.title}
             ownerSubtitle={profileCardData.subtitle}
             ownerPicture={profileCardData.profilePicture}

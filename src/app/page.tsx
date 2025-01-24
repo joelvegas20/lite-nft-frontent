@@ -1,10 +1,8 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Card from "./components/global/card/Card";
 import SpinnerLoader from "@/ui/SpinnerLoader";
-import { ToastContainer, toast } from "react-toastify";
 
 const getNFTs = async () => {
   return await fetch("/api/nft").then((res) => res.json()).then((res) => res.data);
@@ -15,21 +13,11 @@ const getCollections = async () => {
 }
 
 const Home = () => {
-  const router = useRouter();
-  const params = new URLSearchParams(window.location.search);
   const [nfts, setNfts] = useState([]);
   const [collections, setCollections] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const notify = params.get('notify-login');
-    if (notify === 'true') {
-      toast.info('You need to login or register first!', {
-        position: 'top-left',
-        autoClose: 3000,
-      });
-    }
-    router.replace('/');  
     setIsLoading(true);
     const fetchData = async () => {
       try {
@@ -44,20 +32,17 @@ const Home = () => {
         setCollections(collectionData);
 
         setIsLoading(false);
-
+        
       } catch (error) {
         console.error("Error fetching data: ", error);
       }
     };
 
     fetchData();
-  }, [router]);
+  }, []);
 
   return (
-    <div className="h-full flex justify-center items-center p-8 text-white" >
-      <div className="absolute">
-        <ToastContainer position="top-left" />
-      </div>
+    <div className="h-full flex justify-center items-center p-8 text-white">
       <main className="flex flex-col gap-8">
         <div className="flex flex-col gap-5">
           <h1 className="font-black text-2xl">Welcome to Lite NFT Gallery</h1>
@@ -78,7 +63,6 @@ const Home = () => {
                   <div className="h-38" key={index}>
                     <Card
                       variant="section"
-                      id={item.id}
                       ownerTitle={item.ownerTitle}
                       ownerSubtitle={item.ownerSubtitle}
                       ownerPicture={item.ownerPicture}
@@ -101,12 +85,11 @@ const Home = () => {
                 <SpinnerLoader />
               </div>
             ) : (
-              <div className="cards-container flex gap-4 h-full pt-2 w-full overflow-x-scroll overflow-y-hidden ">
+              <div className="cards-container flex gap-4 h-full pt-2 w-full overflow-x-scroll overflow-y-hidden">
                 {collections.map((item, index) => (
                   <div className=" h-38" key={index}>
                     <Card
                       variant="section"
-                      id={`Collections-${item.id}`}
                       ownerTitle={item.ownerTitle}
                       ownerSubtitle={item.ownerSubtitle}
                       ownerPicture={item.ownerPicture}
@@ -116,7 +99,6 @@ const Home = () => {
                       currentPrice={item.price}
                       pinned={true}
                       quantity={20}
-                    // key={`collection-${index}`}
                     />
                   </div>
                 ))}

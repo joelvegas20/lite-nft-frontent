@@ -1,7 +1,6 @@
 "use client"
 
 import React, { useRef, useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
 import { PhotoIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import { createCollection } from '@/lib/createCollection';
 import { ToastContainer, toast } from 'react-toastify';
@@ -20,7 +19,7 @@ const CreateCollection = () => {
 
   useEffect(() => {
     if (!userSession.isUserSignedIn()) {
-      window.location.href = "/?notify-login=true";
+      window.location.href = "/";
     }
     const params = new URLSearchParams(window.location.search);
     const notify = params.get('notify');

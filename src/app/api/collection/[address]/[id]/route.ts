@@ -8,64 +8,37 @@ import { ContractName, Contracts, Stacks } from "@/config/config.keys";
  * Third Party Dependencies
  */
 import {
-  ClarityValue,
-  cvToValue,
-  fetchCallReadOnlyFunction,
+  makeContractCall,
+  broadcastTransaction,
+  uintCV,
 } from "@stacks/transactions";
-import { NextRequest, NextResponse } from "next/server";
-import { json } from "stream/consumers";
+// import { NextRequest } from "next/server";
 
-type Collections = {
-  id: string;
-  name: string;
-  description: string;
-  quantity: number;
-  logo: string;
-}[];
+export async function GET(): Promise<Response> {
+  // const collections: Record<string, string>[] = [];
 
-export async function GET(request: NextRequest): Promise<Response> {
-  const collections: Collections = [];
+  // const pathSegments = request.nextUrl.pathname.split("/");
+  // const address = pathSegments[pathSegments.length - 2];
+  // const collectionId = pathSegments[pathSegments.length - 1];
 
-  const pathSegments = request.nextUrl.pathname.split("/");
-  const address = pathSegments[pathSegments.length - 2];
-  const collectionId = pathSegments[pathSegments.length - 1];
-
-  const data = await fetchCallReadOnlyFunction({
+  const data = await makeContractCall({
     contractName: Contracts[ContractName.COLLECTION].name,
     contractAddress: Contracts[ContractName.COLLECTION].address,
-    functionName: "get-all-collections",
-    functionArgs: [],
-    senderAddress: address,
+    functionName: "get-nfts-by-collection",
+    functionArgs: [uintCV(3)],
+    // senderAddress: address,
+    senderKey:
+      "6f453a44b9d48b4d42547e2f1d3b07e71c492728012caa43af5bb0ecc0ed0c84",
     network: Stacks.network,
   });
-  (cvToValue(data) as Array<ClarityValue>).forEach((value) => {
-    const wrapperOfValues: any = (value as any).value;
-    collections.push({
-      id: wrapperOfValues.id.value,
-      name: wrapperOfValues.name.value,
-      description: wrapperOfValues.description.value,
-      quantity: wrapperOfValues.quantity.value,
-      logo: wrapperOfValues.logo.value
-    });
-  });
-  const res = collections.find((collection) => collection.id === collectionId);
-  if (res === undefined) {
-    return Response.json(
-      {
-        status: "error",
-        message: "Collection not found",
-      },
-      {
-        status: 404,
-      },
-    );
-  }
+
+  const result = await broadcastTransaction({ transaction: data });
+
   return Response.json(
-    {
-      status: "success",
-      res: res,
-    },
+    JSON.parse(
+      JSON.stringify(result, (key, value) =>
+        typeof value === "bigint" ? value.toString() : value
+      )
+    )
   );
 }
-
-
