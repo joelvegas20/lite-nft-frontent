@@ -52,11 +52,11 @@ const Home = () => {
   }, [router]);
 
   return (
-    <div className="h-full flex justify-center items-center p-8 text-white" >
+    <div className="h-full w-full flex justify-center items-center p-8 text-white" >
       <div className="absolute">
         <ToastContainer position="top-left" />
       </div>
-      <main className="flex flex-col gap-8">
+      <main className="w-full flex flex-col gap-8">
         <div className="flex flex-col gap-5">
           <h1 className="font-black text-2xl">Welcome to Lite NFT Gallery</h1>
           <p className="font-normal text-xl">

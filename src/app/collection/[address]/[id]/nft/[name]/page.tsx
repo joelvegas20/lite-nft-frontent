@@ -52,7 +52,7 @@ const CollectionDetail = ({ params }) => {
 
   return (
     <div className='flex w-full h-full pt-4 justify-evenly items-center'>
-      <div className='flex flex-col items-center gap-4 w-2/5 h-5/6 gap-4 text-gray-700'>
+      <div className='flex flex-col items-center w-2/5 h-5/6 gap-4 text-gray-700'>
         <p className='flex flex-col gap-2 w-3/4 rounded-xl p-2 bg-[#dbcccc] shadow-xl hover:shadow-[0_0_20px_rgba(255,255,255,0.25)] hover:bg-[#e6e6e6] hover:scale-105 transition-colors transition-transform'>
           <span className='text-md font-bold'>Nombre de la Colección</span>
           <span className='text-sm'>{collectionDetailData.name}</span>
