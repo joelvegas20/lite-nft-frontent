@@ -16,12 +16,13 @@ const getCollections = async () => {
 
 const Home = () => {
   const router = useRouter();
-  const params = new URLSearchParams(window.location.search);
+  
   const [nfts, setNfts] = useState([]);
   const [collections, setCollections] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
     const notify = params.get('notify-login');
     if (notify === 'true') {
       toast.info('You need to login or register first!', {

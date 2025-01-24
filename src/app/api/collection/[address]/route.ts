@@ -14,7 +14,6 @@ import {
   makeContractCall,
   stringAsciiCV,
   uintCV,
-  // getPublicKey,
   makeRandomPrivKey
 } from "@stacks/transactions";
 import { NextRequest, NextResponse } from "next/server";
