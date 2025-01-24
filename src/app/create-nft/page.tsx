@@ -52,7 +52,7 @@ const CreateNFT = () => {
   };
   useEffect(() => {
     if (!userSession.isUserSignedIn()) {
-      window.location.href = "/?notify-login=true";
+     router.replace("/?notify-login=true");
     }
     const fetchCollections = async () => {
       try {

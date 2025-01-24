@@ -101,7 +101,7 @@ export default function Card({
   // const cardSizeSection = "w-72 h-96";
   let href = "/?notify-login=true";
   if (userData && id.includes("Collections-")) {
-    href = `/collection-detail/${userData?.profile.stxAddress.testnet}/${id.split("-")[1]}`;
+    href = `/collection/${userData?.profile.stxAddress.testnet}/${id.split("-")[1]}`;
   }
   return (
     <Link href={href}>

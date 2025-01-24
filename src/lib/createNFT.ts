@@ -10,6 +10,7 @@ import { stringAsciiCV, uintCV } from "@stacks/transactions";
 import { openContractCall } from "@stacks/connect";
 import csvParser from "csv-parser";
 import { Readable } from "stream";
+import { useRouter } from "next/router";
 
 interface NFTCollectionProps {
   NFTName: string;
@@ -94,6 +95,7 @@ export const createNFT = async ({
   collectionId,
   collectionName
 }: NFTCollectionProps) : Promise <void | string> => {
+  const router = useRouter();
   const reader = new FileReader();
   reader.onload = async () => {
     try {
@@ -126,10 +128,10 @@ export const createNFT = async ({
         ],
         network: "testnet",
         onFinish: (data) => {
-          window.location.href = "/profile";
+          router.replace("/profile");
         },
         onCancel: () => {
-          window.location.href = "/create-nft";
+          router.replace("/create-nft");  
           console.log("User cancelled the transaction");
         },
       });

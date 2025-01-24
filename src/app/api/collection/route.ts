@@ -1,16 +1,19 @@
-export const runtime = "nodejs";
+export const runtime = 'edge';
 
+/*
+ * Local Dependencies
+ */
 import {
   ContractAddress,
   ContractName,
   Contracts,
   Stacks,
 } from "@/config/config.keys";
+
 /*
  * Third Party Dependencies
  */
 import { fetchCallReadOnlyFunction, principalCV } from "@stacks/transactions";
-import { NextResponse } from "next/server";
 
 export async function GET(): Promise<Response> {
   const collections: Record<string, string>[] = [];
@@ -20,7 +23,7 @@ export async function GET(): Promise<Response> {
     contractAddress: Contracts[ContractName.COLLECTION].address,
     functionName: "get-all-collections",
     functionArgs: [],
-    senderAddress: "ST2SJ42BZ81YT3FA4V7PE4F0DGV4V60XWWK58VXC7",
+    senderAddress: Contracts[ContractName.COLLECTION].address,
     network: Stacks.network,
   });
 

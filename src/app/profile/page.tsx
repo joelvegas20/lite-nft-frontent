@@ -6,6 +6,7 @@ import Card from "../components/global/card/Card";
 import SpinnerLoader from "@/ui/SpinnerLoader";
 import { shortenAddress } from "../utils/Address";
 import { userSession } from "@/lib/Wallet";
+import { useRouter } from "next/navigation";
 
 const STATIC_IMAGE_URL =
   "https://images.gamma.io/ipfs/QmcAqUQDJ1bcLZVtCqJduLReGYyWm9TjdcHzAqNDEV5r24/images/1109.webp";
@@ -25,6 +26,7 @@ async function getNFTs(address) {
 
 const Profile = () => {
   const profile = useProfile();
+  const router = useRouter();
   const { currentProfileSection } = useGlobal(); // Toggle: NFTs o Collections
   const [profileCardData, setProfileCardData] = useState({
     title: "",
@@ -39,7 +41,7 @@ const Profile = () => {
 
     // Verify if user is logged in
     if(!userSession.isUserSignedIn()) {
-      window.location.href = "/?notify-login=true";
+      router.replace("/?notify-login=true");
     }
 
     if (profile) {
@@ -63,8 +65,6 @@ const Profile = () => {
     setIsLoading(true);
     const fetchData = async () => {
       try {
-        console.log("Profile: ", profile);
-
         if (profile) {
           const data =
             currentProfileSection === "NFTs" ? await getNFTs(profile.stxAddress) : await getCollections(profile.stxAddress);

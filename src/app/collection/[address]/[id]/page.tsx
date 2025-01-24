@@ -1,9 +1,11 @@
 "use client";
+export const runtime = 'edge';
 
 import { useEffect, useState, use } from 'react';
 import { userSession } from '@/lib/Wallet';
 import Image from 'next/image';
 import SpinnerLoader from '@/ui/SpinnerLoader';
+import { useRouter } from 'next/navigation';
 
 type Collection = {
   id: string;
@@ -22,6 +24,7 @@ const getCollectionDetail = async (address, id) => {
 
 
 const CollectionDetail = ({ params }) => {
+  const router = useRouter();
   const props: any = use(params);
   const address = props.address;
   const id = props.id;
@@ -30,14 +33,14 @@ const CollectionDetail = ({ params }) => {
 
   useEffect(() => {
     if (!userSession.isUserSignedIn()) {
-      window.location.href = "/?notify-login=true";
+      router.replace('/?notify-login=true');
     }
     const fetchData = async () => {
       try {
         const res = await getCollectionDetail(address, id)
         setCollectionDetailData(res);
       } catch (error) {
-        window.location.href = "/";
+        router.replace('/');
       }
     }
     fetchData();

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Card from "./components/global/card/Card";
 import SpinnerLoader from "@/ui/SpinnerLoader";
@@ -16,12 +16,14 @@ const getCollections = async () => {
 
 const Home = () => {
   const router = useRouter();
-  const params = new URLSearchParams(window.location.search);
+  
   const [nfts, setNfts] = useState([]);
   const [collections, setCollections] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const pathname = usePathname();
 
   useEffect(() => {
+    const params = new URLSearchParams(pathname);
     const notify = params.get('notify-login');
     if (notify === 'true') {
       toast.info('You need to login or register first!', {
@@ -33,14 +35,10 @@ const Home = () => {
     setIsLoading(true);
     const fetchData = async () => {
       try {
-        // Get NFTs
         const nftData = await getNFTs();
-        console.log(nftData);
-        setNfts(nftData);
-
-        // Get Collections
         const collectionData = await getCollections();
-        console.log(collectionData);
+        
+        setNfts(nftData);
         setCollections(collectionData);
 
         setIsLoading(false);
@@ -54,11 +52,11 @@ const Home = () => {
   }, [router]);
 
   return (
-    <div className="h-full flex justify-center items-center p-8 text-white" >
+    <div className="h-full w-full flex justify-center items-center p-8 text-white" >
       <div className="absolute">
         <ToastContainer position="top-left" />
       </div>
-      <main className="flex flex-col gap-8">
+      <main className="w-full flex flex-col gap-8">
         <div className="flex flex-col gap-5">
           <h1 className="font-black text-2xl">Welcome to Lite NFT Gallery</h1>
           <p className="font-normal text-xl">
