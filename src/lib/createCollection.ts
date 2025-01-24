@@ -1,6 +1,7 @@
 import { openContractCall } from "@stacks/connect";
 import { stringAsciiCV } from "@stacks/transactions";
 import { storage } from "@/lib/Storage"
+import { useRouter } from "next/router";
 
 interface createCollectionProps {
   collectionName: string;
@@ -12,7 +13,6 @@ const uploadImage = async (
   collectionName: string,
   collectionImage: File,
 ) => {
-  // this return the url of the upload image into the gaia storage
   return await storage.putFile(
     `${collectionName}-image`,
     collectionImage as File,
@@ -26,6 +26,7 @@ export const createCollection = async ({
   collectionDescription,
   collectionImage,
 }: createCollectionProps) => {
+  const router = useRouter();
   const imageURL = await uploadImage(collectionName, collectionImage as File);
   await openContractCall({
     contractAddress: 'ST3GBYD0VN28MAPDGNGTFNXQV5QJXQ3VCV3WZT75T',
@@ -35,10 +36,10 @@ export const createCollection = async ({
     network: 'testnet',
     onFinish: (data) => {
       console.log('Data:', data);
-      window.location.href = '/profile';
+      router.replace('/profile');
     },
     onCancel: () => {
-      window.location.href = '/create-collection';
+      router.replace('/create-collection');
     },
   });
 };

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Card from "./components/global/card/Card";
 import SpinnerLoader from "@/ui/SpinnerLoader";
@@ -20,9 +20,10 @@ const Home = () => {
   const [nfts, setNfts] = useState([]);
   const [collections, setCollections] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const pathname = usePathname();
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
+    const params = new URLSearchParams(pathname);
     const notify = params.get('notify-login');
     if (notify === 'true') {
       toast.info('You need to login or register first!', {
@@ -34,14 +35,10 @@ const Home = () => {
     setIsLoading(true);
     const fetchData = async () => {
       try {
-        // Get NFTs
         const nftData = await getNFTs();
-        console.log(nftData);
-        setNfts(nftData);
-
-        // Get Collections
         const collectionData = await getCollections();
-        console.log(collectionData);
+        
+        setNfts(nftData);
         setCollections(collectionData);
 
         setIsLoading(false);

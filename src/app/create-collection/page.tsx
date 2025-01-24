@@ -1,12 +1,12 @@
 "use client"
 
 import React, { useRef, useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
 import { PhotoIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import { createCollection } from '@/lib/createCollection';
 import { ToastContainer, toast } from 'react-toastify';
 import SpinnerLoader from '@/ui/SpinnerLoader';
 import { userSession } from '@/lib/Wallet';
+import { usePathname, useRouter } from 'next/navigation';
 
 const CreateCollection = () => {
   const [notificationHasBeenShown, setNotificationHasBeenShown] = useState(false);
@@ -17,12 +17,14 @@ const CreateCollection = () => {
   const [collectionImage, setCollectionImage] = useState<File | null>(null);
   const [previewURL, setPreviewURL] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     if (!userSession.isUserSignedIn()) {
-      window.location.href = "/?notify-login=true";
+      router.replace("/?notify-login=true");
     }
-    const params = new URLSearchParams(window.location.search);
+    const params = new URLSearchParams(pathname);
     const notify = params.get('notify');
     if (!notificationHasBeenShown && notify === 'true') {
       setNotificationHasBeenShown(true);
