@@ -19,14 +19,14 @@ export async function GET(request: NextRequest): Promise<Response> {
 
   console.log(address);
 
-  const data = (await fetchCallReadOnlyFunction({
+  const data = await fetchCallReadOnlyFunction({
     contractName: Contracts[ContractName.COLLECTION].name,
     contractAddress: Contracts[ContractName.COLLECTION].address,
     functionName: "get-nfts-by-owner",
     functionArgs: [],
     senderAddress: Contracts[ContractName.COLLECTION].address,
     network: Stacks.network,
-  })) as any;
+  }) as any;
 
   if (data.type === "list") {
     data.value.forEach(({ value }) => {

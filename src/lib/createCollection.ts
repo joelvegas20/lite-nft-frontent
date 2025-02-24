@@ -26,7 +26,7 @@ export const createCollection = async ({
   collectionDescription,
   collectionImage,
 }: createCollectionProps) => {
-  const router = useRouter();
+  // const router = useRouter();
   const imageURL = await uploadImage(collectionName, collectionImage as File);
   await openContractCall({
     contractAddress: 'ST3GBYD0VN28MAPDGNGTFNXQV5QJXQ3VCV3WZT75T',
@@ -36,10 +36,10 @@ export const createCollection = async ({
     network: 'testnet',
     onFinish: (data) => {
       console.log('Data:', data);
-      router.replace('/profile');
+      window.location.replace('/profile');
     },
     onCancel: () => {
-      router.replace('/create-collection');
+      window.location.replace('/create-collection');
     },
   });
 };

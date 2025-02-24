@@ -95,7 +95,7 @@ export const createNFT = async ({
   collectionId,
   collectionName
 }: NFTCollectionProps) : Promise <void | string> => {
-  const router = useRouter();
+  // const router = useRouter();
   const reader = new FileReader();
   reader.onload = async () => {
     try {
@@ -128,10 +128,10 @@ export const createNFT = async ({
         ],
         network: "testnet",
         onFinish: (data) => {
-          router.replace("/profile");
+          window.location.replace("/profile");
         },
         onCancel: () => {
-          router.replace("/create-nft");  
+          window.location.replace("/create-nft");  
           console.log("User cancelled the transaction");
         },
       });

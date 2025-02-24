@@ -60,13 +60,11 @@ export async function GET(request: NextRequest): Promise<Response> {
   });
 }
 
-export async function POST(request: NextRequest): Promise<NextResponse> {
+export async function POST(request) {
   try {
 
     const privateKey = makeRandomPrivKey();
     // const publicKey = await getPublicKey(privateKey);
-
-    console.log("Hola");
 
     const transaction = await makeContractCall({
       contractName: Contracts[ContractName.COLLECTION].name,
@@ -90,10 +88,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     console.log(result);
 
-    return NextResponse.json({
-      status: "success",
+    return {
+      status: 200,
       data: result,
-    });
+    };
   } catch (error) {
     console.log(error); // TODO: Remove this line
     return NextResponse.json({

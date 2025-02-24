@@ -108,12 +108,10 @@ export default function Card({
       <div
         className={`relative w-full h-full rounded-2xl overflow-hidden ${containerPadding} cursor-pointer hover:scale-105 transition-transform`}
       >
-        <Image
+        <img
           src={image}
           alt="Fondo"
-          fill
           className="object-cover absolute top-0 left-0 w-full h-full z-0"
-          sizes="(max-width: 768px) 100vw, 50vw"
         />
         <div
           className={`relative z-10 w-full h-full flex flex-col items-center justify-between rounded-2xl ${textColorClass} ${variant === "profile" ? "pt-4" : "pt-2"}`}

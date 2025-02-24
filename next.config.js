@@ -13,6 +13,7 @@ const nextConfig = {
       "gaia.hiro.so",
       "images.unsplash.com",
       "encrypted-tbn0.gstatic.com",
+      // "www.gettyimages.com",
     ],
   },
 };
