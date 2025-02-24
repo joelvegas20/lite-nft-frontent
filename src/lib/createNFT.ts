@@ -11,6 +11,7 @@ import { openContractCall } from "@stacks/connect";
 import csvParser from "csv-parser";
 import { Readable } from "stream";
 import { useRouter } from "next/router";
+import {ContractName, Contracts, Stacks} from "@config/config.keys";
 
 interface NFTCollectionProps {
   NFTName: string;
@@ -116,17 +117,16 @@ export const createNFT = async ({
         JSON.stringify(metadata)
       ); 
       await openContractCall({
-        contractAddress: "ST3GBYD0VN28MAPDGNGTFNXQV5QJXQ3VCV3WZT75T",
-        contractName: "collection-v5",
+        contractAddress: Contracts[ContractName.COLLECTION].name,
+        contractName:Contracts[ContractName.COLLECTION].address,
         functionName: "create-nft",
-        // name - attributes of the nft[URI] - image[URI] - collection-id
         functionArgs: [
           stringAsciiCV(NFTName),
           stringAsciiCV(nftAttrURL),
           stringAsciiCV(nftLogoURL),
           uintCV(collectionId),
         ],
-        network: "testnet",
+        network: Stacks.network,
         onFinish: (data) => {
           window.location.replace("/profile");
         },
