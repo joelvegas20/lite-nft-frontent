@@ -6,7 +6,7 @@ import { storage } from "./Storage";
 /*
  * Third Party Dependencies
  */
-import { stringAsciiCV, uintCV } from "@stacks/transactions";
+import {stringUtf8CV, uintCV} from "@stacks/transactions";
 import { openContractCall } from "@stacks/connect";
 import csvParser from "csv-parser";
 import { Readable } from "stream";
@@ -121,9 +121,9 @@ export const createNFT = async ({
         contractName:Contracts[ContractName.COLLECTION].name,
         functionName: "create-nft",
         functionArgs: [
-          stringAsciiCV(NFTName),
-          stringAsciiCV(nftAttrURL),
-          stringAsciiCV(nftLogoURL),
+          stringUtf8CV(NFTName),
+          stringUtf8CV(nftAttrURL),
+          stringUtf8CV(nftLogoURL),
           uintCV(collectionId),
         ],
         network: Stacks.network,

@@ -1,5 +1,5 @@
 import { openContractCall } from "@stacks/connect";
-import { stringAsciiCV } from "@stacks/transactions";
+import {stringAsciiCV, stringUtf8CV} from "@stacks/transactions";
 import { storage } from "@/lib/Storage"
 import { useRouter } from "next/router";
 import {ContractName, Contracts, Stacks} from "@config/config.keys";
@@ -33,7 +33,8 @@ export const createCollection = async ({
     contractAddress: Contracts[ContractName.COLLECTION].address,
     contractName: Contracts[ContractName.COLLECTION].name,
     functionName: 'create-collection',
-    functionArgs: [stringAsciiCV(collectionName), stringAsciiCV(collectionDescription), stringAsciiCV(imageURL)],
+    functionArgs: [
+        stringUtf8CV(collectionName), stringUtf8CV(collectionDescription), stringUtf8CV(imageURL)],
     network: Stacks.network,
     onFinish: (data) => {
       console.log('Data:', data);

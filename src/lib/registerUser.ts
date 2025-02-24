@@ -1,7 +1,6 @@
-import { fetchCallReadOnlyFunction, principalCV, stringAsciiCV } from '@stacks/transactions';
+import {fetchCallReadOnlyFunction, principalCV, stringUtf8CV} from '@stacks/transactions';
 import { openContractCall } from '@stacks/connect';
 import { userSession } from '@/lib/Wallet';
-import { STACKS_TESTNET } from '@stacks/network';
 import {ContractName, Contracts, Stacks} from "@config/config.keys";
 
 export const registerUser = async () => {
@@ -21,7 +20,7 @@ export const registerUser = async () => {
         contractAddress: Contracts[ContractName.AUTH].address,
         contractName: Contracts[ContractName.AUTH].name,
         functionName: 'login',
-        functionArgs: [principalCV(userData?.profile.stxAddress.testnet), stringAsciiCV('gen-from-'+userData?.profile.stxAddress.testnet)],
+        functionArgs: [principalCV(userData?.profile.stxAddress.testnet), stringUtf8CV('gen-from-'+userData?.profile.stxAddress.testnet)],
         senderKey: userSession.loadUserData().appPrivateKey,
         network: Stacks.network,
         onCancel: () => {
@@ -39,7 +38,7 @@ export const registerUser = async () => {
       contractAddress: Contracts[ContractName.AUTH].address,
       contractName: Contracts[ContractName.AUTH].name,
       functionName: 'login',
-      functionArgs: [principalCV(userData?.profile.stxAddress.testnet), stringAsciiCV(userData?.profile.stxAddress.testnet)],
+      functionArgs: [principalCV(userData?.profile.stxAddress.testnet), stringUtf8CV(userData?.profile.stxAddress.testnet)],
       senderAddress: userData?.profile.stxAddress.testnet,
       network: Stacks.network,
     });
