@@ -1,5 +1,6 @@
 import { userSession } from "@/lib/Wallet";
 import { ClarityValue, cvToValue, fetchCallReadOnlyFunction } from "@stacks/transactions";
+import {ContractName, Contracts, Stacks} from "@config/config.keys";
 
 type Collections = {
   id: string;
@@ -14,12 +15,12 @@ export const RetrieveUserCollection = async () => {
   const userData = userSession.loadUserData();
   try {
     const data = await fetchCallReadOnlyFunction({
-      contractName: 'collection-v5',
-      contractAddress: 'ST3GBYD0VN28MAPDGNGTFNXQV5QJXQ3VCV3WZT75T',
+      contractName: Contracts[ContractName.COLLECTION].name,
+      contractAddress: Contracts[ContractName.COLLECTION].address,
       functionName: 'get-collections-by-owner',
       functionArgs: [],
       senderAddress: userData?.profile.stxAddress.testnet,
-      network: 'testnet',
+      network:  Stacks.network,
     });
     (cvToValue(data) as Array<ClarityValue>).forEach((value) => {
       const wrapperOfValues: any = (value as any).value;

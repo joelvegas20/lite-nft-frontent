@@ -2,27 +2,28 @@ import { fetchCallReadOnlyFunction, principalCV, stringAsciiCV } from '@stacks/t
 import { openContractCall } from '@stacks/connect';
 import { userSession } from '@/lib/Wallet';
 import { STACKS_TESTNET } from '@stacks/network';
+import {ContractName, Contracts, Stacks} from "@config/config.keys";
 
 export const registerUser = async () => {
   try {
     const userData = userSession.loadUserData();
     const userExist = await fetchCallReadOnlyFunction({
-      contractName: 'auth-v3',
-      contractAddress: 'ST3GBYD0VN28MAPDGNGTFNXQV5QJXQ3VCV3WZT75T',
+      contractName: Contracts[ContractName.AUTH].name,
+      contractAddress: Contracts[ContractName.AUTH].address,
       functionName: 'get-user-data',
       functionArgs: [principalCV(userData?.profile.stxAddress.testnet)],
       senderAddress: userData?.profile.stxAddress.testnet,
-      network: STACKS_TESTNET,
+      network: Stacks.network,
     });
     if (userExist.type === "err") {
       console.log("User does not exist, registering user...");
       const result = await openContractCall({
-        contractAddress: 'ST3GBYD0VN28MAPDGNGTFNXQV5QJXQ3VCV3WZT75T',
-        contractName: 'auth-v3',
+        contractAddress: Contracts[ContractName.AUTH].address,
+        contractName: Contracts[ContractName.AUTH].name,
         functionName: 'login',
         functionArgs: [principalCV(userData?.profile.stxAddress.testnet), stringAsciiCV('gen-from-'+userData?.profile.stxAddress.testnet)],
         senderKey: userSession.loadUserData().appPrivateKey,
-        network: STACKS_TESTNET,
+        network: Stacks.network,
         onCancel: () => {
           userSession.signUserOut();
         },
@@ -35,12 +36,12 @@ export const registerUser = async () => {
       return result;
     }
     const result = await fetchCallReadOnlyFunction({
-      contractName: 'auth-v3',
-      contractAddress: 'ST3GBYD0VN28MAPDGNGTFNXQV5QJXQ3VCV3WZT75T',
+      contractAddress: Contracts[ContractName.AUTH].address,
+      contractName: Contracts[ContractName.AUTH].name,
       functionName: 'login',
       functionArgs: [principalCV(userData?.profile.stxAddress.testnet), stringAsciiCV(userData?.profile.stxAddress.testnet)],
       senderAddress: userData?.profile.stxAddress.testnet,
-      network: STACKS_TESTNET,
+      network: Stacks.network,
     });
     return result;
   } catch (error) {

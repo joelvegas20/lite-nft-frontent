@@ -117,8 +117,8 @@ export const createNFT = async ({
         JSON.stringify(metadata)
       ); 
       await openContractCall({
-        contractAddress: Contracts[ContractName.COLLECTION].name,
-        contractName:Contracts[ContractName.COLLECTION].address,
+        contractAddress: Contracts[ContractName.COLLECTION].address,
+        contractName:Contracts[ContractName.COLLECTION].name,
         functionName: "create-nft",
         functionArgs: [
           stringAsciiCV(NFTName),

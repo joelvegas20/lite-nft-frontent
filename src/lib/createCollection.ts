@@ -30,8 +30,8 @@ export const createCollection = async ({
   // const router = useRouter();
   const imageURL = await uploadImage(collectionName, collectionImage as File);
   await openContractCall({
-    contractAddress: Contracts[ContractName.COLLECTION].name,
-    contractName: Contracts[ContractName.COLLECTION].address,
+    contractAddress: Contracts[ContractName.COLLECTION].address,
+    contractName: Contracts[ContractName.COLLECTION].name,
     functionName: 'create-collection',
     functionArgs: [stringAsciiCV(collectionName), stringAsciiCV(collectionDescription), stringAsciiCV(imageURL)],
     network: Stacks.network,
