@@ -2,6 +2,7 @@ import { openContractCall } from "@stacks/connect";
 import { stringAsciiCV } from "@stacks/transactions";
 import { storage } from "@/lib/Storage"
 import { useRouter } from "next/router";
+import {ContractName, Contracts, Stacks} from "@config/config.keys";
 
 interface createCollectionProps {
   collectionName: string;
@@ -29,11 +30,11 @@ export const createCollection = async ({
   // const router = useRouter();
   const imageURL = await uploadImage(collectionName, collectionImage as File);
   await openContractCall({
-    contractAddress: 'ST3GBYD0VN28MAPDGNGTFNXQV5QJXQ3VCV3WZT75T',
-    contractName: 'collection-v5',
+    contractAddress: Contracts[ContractName.COLLECTION].name,
+    contractName: Contracts[ContractName.COLLECTION].address,
     functionName: 'create-collection',
     functionArgs: [stringAsciiCV(collectionName), stringAsciiCV(collectionDescription), stringAsciiCV(imageURL)],
-    network: 'testnet',
+    network: Stacks.network,
     onFinish: (data) => {
       console.log('Data:', data);
       window.location.replace('/profile');
