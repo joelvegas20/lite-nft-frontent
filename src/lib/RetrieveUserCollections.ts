@@ -32,7 +32,6 @@ export const RetrieveUserCollection = async () => {
         logo: wrapperOfValues.logo.value 
       });
     });
-    console.log(collectionNames);
     return collectionNames;
   } catch (error) {
     console.error("Error at retrieval collection names: ", error);

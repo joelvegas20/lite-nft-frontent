@@ -52,7 +52,7 @@ const CreateNFT = () => {
   };
   useEffect(() => {
     if (!userSession.isUserSignedIn()) {
-     router.replace("/?notify-login=true");
+      router.replace("/?notify-login=true");
     }
     const fetchCollections = async () => {
       try {
@@ -62,6 +62,7 @@ const CreateNFT = () => {
         } else {
           setCollectionsByOwner(collections);
           setCollectionName(collections[0].name);
+          setcollectionId(parseInt(collections[0].id));
           setIsLoading(false);
         }
       } catch (error) {
@@ -103,7 +104,10 @@ const CreateNFT = () => {
                 id="collection-id"
                 className="p-2 rounded bg-gray-200 text-black"
                 value={collectionId}
-                onChange={(e) => { setcollectionId(parseInt(e.target.value)); setCollectionName(e.target.options[e.target.selectedIndex].text) }}
+                onChange={(e) => { 
+                  setcollectionId(parseInt(e.target.value));
+                  setCollectionName(e.target.options[e.target.selectedIndex].text);
+                }}
                 required
               >
                 <option value="" disabled>Select a collection</option>
